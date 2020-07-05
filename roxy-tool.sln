@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "roxy-tool", "roxy-tool\roxy-tool.csproj", "{DB756F4F-32C7-4591-956A-6A4642715767}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB756F4F-32C7-4591-956A-6A4642715767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB756F4F-32C7-4591-956A-6A4642715767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB756F4F-32C7-4591-956A-6A4642715767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB756F4F-32C7-4591-956A-6A4642715767}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B3EC5B09-4975-4CA0-8F87-CE8D864131E8}
+	EndGlobalSection
+EndGlobal
