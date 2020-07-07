@@ -142,6 +142,9 @@ namespace gtksharp_test
             devList.Changed += DevList_Changed;
             LookForDevices();
 
+            // Hide arcin panel
+            arcinConfigPanel.OptionsGrid.Visible = false;
+
             Application.Run();
         }
 
@@ -233,9 +236,16 @@ namespace gtksharp_test
             licenseWindow.Resize(300, 300);
             licenseWindow.Resizable = false;
             Label licenseLabel = new Label();
-            licenseLabel.Text = @"arcin firmware, original configuration tool
+            licenseLabel.Text = @"Roxy Configuration and Flash Tool
+Copyright (c) 2020, Verox Zik
+
+arcin firmware, original configuration tool
 Copyright (c) 2013, Vegard Storheil Eriksen
 All rights reserved.
+
+GtkSharp
+Used under the LGPL v2.0 License.
+<https://github.com/GtkSharp/GtkSharp>
 
 ELFSharp
 Copyright (c) 2011 Konrad Kruczyński and other contributors

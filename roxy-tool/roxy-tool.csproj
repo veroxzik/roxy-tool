@@ -15,6 +15,11 @@
     <PackageIcon>logo-icon.png</PackageIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ELFSharp" Version="2.11.0" />
     <PackageReference Include="GtkSharp" Version="3.22.25.98" />
