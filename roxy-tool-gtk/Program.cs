@@ -7,6 +7,7 @@ using System.Linq;
 using ELFSharp.ELF;
 using roxy_tool;
 using System.Runtime.CompilerServices;
+using Roxy.Lib;
 
 namespace gtksharp_test
 {
@@ -26,6 +27,7 @@ namespace gtksharp_test
 
         static RoxyConfigPanel roxyConfigPanel = new RoxyConfigPanel();
         static ArcinConfigPanel arcinConfigPanel = new ArcinConfigPanel();
+        static ArcinRoxyConfigPanel arcinRoxyConfigPanel = new ArcinRoxyConfigPanel();
         static HeaderBar configHeaderBar;
 
         static bool waitingForBootloader = false;
@@ -88,6 +90,7 @@ namespace gtksharp_test
             configMainGrid.Attach(configHeader, 0, 1, 1, 1);
             configMainGrid.Attach(roxyConfigPanel.OptionsGrid, 0, 2, 1, 1);
             configMainGrid.Attach(arcinConfigPanel.OptionsGrid, 0, 2, 1, 1);
+            configMainGrid.Attach(arcinRoxyConfigPanel.OptionsGrid, 0, 2, 1, 1);
 
             // Flash page
             Label filenameLabel = new Label("Select an ELF File:");
@@ -387,9 +390,17 @@ theKeithD's python bootloader script
                 if (dev.VendorID == 7504 && dev.ProductID == 24704)
                 {
                     device = dev;
-                    StatusWrite("arcin found!");
+                    if (device.GetProductName().Contains("Roxy"))
+                    {
+                        StatusWrite("arcin (Roxy firmware) found!");
+                        SetBoard(Board.arcinRoxy, true);
+                    }
+                    else
+                    {
+                        StatusWrite("arcin found!");
+                        SetBoard(Board.arcin, true);
+                    }
                     SetFlashWidgets(isElfLoaded);
-                    SetBoard(Board.arcin, true);
                     return;
                 }
                 if (dev.VendorID == 7504 && dev.ProductID == 24708)
@@ -471,14 +482,23 @@ theKeithD's python bootloader script
                 case Board.arcin:
                     currentConfig = arcinConfigPanel;
                     arcinConfigPanel.OptionsGrid.Visible = true;
+                    arcinRoxyConfigPanel.OptionsGrid.Visible = false;
                     roxyConfigPanel.OptionsGrid.Visible = false;
                     configHeaderBar.Subtitle = "arcin";
                     break;
                 case Board.Roxy:
                     currentConfig = roxyConfigPanel;
                     arcinConfigPanel.OptionsGrid.Visible = false;
+                    arcinRoxyConfigPanel.OptionsGrid.Visible = false;
                     roxyConfigPanel.OptionsGrid.Visible = true;
                     configHeaderBar.Subtitle = "Roxy";
+                    break;
+                case Board.arcinRoxy:
+                    currentConfig = arcinRoxyConfigPanel;
+                    arcinRoxyConfigPanel.OptionsGrid.Visible = true;
+                    arcinConfigPanel.OptionsGrid.Visible = false;
+                    roxyConfigPanel.OptionsGrid.Visible = false;
+                    configHeaderBar.Subtitle = "arcin (Roxy Firmware)";
                     break;
                 default:
                     break;
@@ -490,12 +510,5 @@ theKeithD's python bootloader script
             consoleText.Text += text + Environment.NewLine;
         }
         
-    }
-
-    enum Board
-    {
-        None,
-        arcin,
-        Roxy
     }
 }

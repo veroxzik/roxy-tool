@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace roxy_tool
+﻿namespace Roxy.Lib
 {
-    interface IConfigPanel
+    public interface IConfigPanel
     {
         void PopulateControls(byte[] configBytes);
 

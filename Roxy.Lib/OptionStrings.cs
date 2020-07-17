@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace roxy_tool
+﻿namespace Roxy.Lib
 {
     public static class OptionStrings
     {
@@ -24,5 +20,6 @@ namespace roxy_tool
         public static readonly string Rgb1Color = "rgb1Color";
         public static readonly string Rgb2Color = "rgb2Color";
         public static readonly string AscEmulation = "ascEmulation";
+        public static readonly string AxisDebounceTime = "axisDebounceTime";
     }
 }
