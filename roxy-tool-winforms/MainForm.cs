@@ -209,7 +209,26 @@ namespace Roxy.Tool.WinForms
 
         private void flashButton_Click(object sender, EventArgs e)
         {
-
+            if (device != null)
+            {
+                // Reset to bootloader
+                StatusWrite("Resetting to bootloader...");
+                if (device != null)
+                {
+                    HidStream hidStream;
+                    if (device.TryOpen(out hidStream))
+                    {
+                        using (hidStream)
+                        {
+                            var buf = new byte[] { 176, 0x10 };
+                            hidStream.SetFeature(buf, 0, 2);
+                        }
+                    }
+                }
+                waitingForBootloader = true;
+            }
+            else if (bootloader != null)
+                flashElf(this, new EventArgs());
         }
 
         void flashElf(object sender, EventArgs e)
@@ -400,7 +419,5 @@ namespace Roxy.Tool.WinForms
                     break;
             }
         }
-
-        
     }
 }
