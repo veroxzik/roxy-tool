@@ -414,7 +414,6 @@ namespace Roxy.Tool.WinForms
                     });
                     EnableConfigBox(configEnabled);
                     break;
-                    break;
                 default:
                     break;
             }
