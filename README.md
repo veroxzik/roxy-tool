@@ -4,7 +4,7 @@ This is a simple tool to configure the Roxy and arcin boards.
 
 ## Current Release
 
-The current version is [v0.3.1](https://github.com/veroxzik/roxy-tool/releases).
+The current version is [v0.3.2](https://github.com/veroxzik/roxy-tool/releases).
 
 ## Configuration Options (Roxy)
 

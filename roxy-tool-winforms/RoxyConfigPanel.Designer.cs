@@ -85,6 +85,7 @@
             this.rgb2ColorButton.TabIndex = 66;
             this.rgb2ColorButton.Text = "RGB 2";
             this.rgb2ColorButton.UseVisualStyleBackColor = true;
+            this.rgb2ColorButton.Click += new System.EventHandler(this.rgb2ColorButton_Click);
             // 
             // label9
             // 
@@ -103,6 +104,7 @@
             this.rgb1ColorButton.TabIndex = 64;
             this.rgb1ColorButton.Text = "RGB 1";
             this.rgb1ColorButton.UseVisualStyleBackColor = true;
+            this.rgb1ColorButton.Click += new System.EventHandler(this.rgb1ColorButton_Click);
             // 
             // rgbModeCombo
             // 

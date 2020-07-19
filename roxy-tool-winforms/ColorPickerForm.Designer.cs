@@ -46,6 +46,7 @@
             this.cancelButton.TabIndex = 13;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // okButton
             // 
@@ -55,6 +56,7 @@
             this.okButton.TabIndex = 12;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // colorValueText
             // 
@@ -63,6 +65,7 @@
             this.colorValueText.Name = "colorValueText";
             this.colorValueText.Size = new System.Drawing.Size(89, 20);
             this.colorValueText.TabIndex = 11;
+            this.colorValueText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.colorValueText_KeyPress);
             // 
             // label2
             // 
@@ -81,6 +84,7 @@
             this.colorTrackBar.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.colorTrackBar.Size = new System.Drawing.Size(45, 293);
             this.colorTrackBar.TabIndex = 9;
+            this.colorTrackBar.Scroll += new System.EventHandler(this.colorTrackBar_Scroll);
             // 
             // label1
             // 
