@@ -42,11 +42,11 @@ namespace roxy_tool
             flagsGrid.Attach(analogInputCheck, 0, 4, 1, 1);
             flagsGrid.Attach(analogButtonsCheck, 0, 5, 1, 1);
             ComboBox qe1Combo = new ComboBox(new string[] { "1:1", "1:2", "1:3", "1:4", "1:6", "1:8", "1:11", "1:16",
-                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1"});
+                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1", "600 PPR"});
             qe1Combo.Active = 0;
             widgetDict[OptionStrings.Qe1Sensitivity] = qe1Combo;
             ComboBox qe2Combo = new ComboBox(new string[] { "1:1", "1:2", "1:3", "1:4", "1:6", "1:8", "1:11", "1:16",
-                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1"});
+                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1", "600 PPR"});
             qe2Combo.Active = 0;
             widgetDict[OptionStrings.Qe2Sensitivity] = qe2Combo;
             ComboBox ps2Combo = new ComboBox(new string[] { "Disabled", "Pop'n Music", "IIDX (QE1)", "IIDX (QE2)" });
@@ -198,8 +198,12 @@ namespace roxy_tool
             configBytes[3] = 0x00;  // Padding byte
             configBytes[4] = (byte)(widgetDict[OptionStrings.RgbMode] as ComboBox).Active;
             var hsv = ColorConversion.RGB2HSV((widgetDict[OptionStrings.Rgb1Color] as ColorButton).Rgba);
+            if (hsv.Saturation == 0)    // Hardcode white edge case
+                hsv.Hue = 255;
             configBytes[5] = (byte)(hsv.Hue / 360.0 * 255.0);
             hsv = ColorConversion.RGB2HSV((widgetDict[OptionStrings.Rgb2Color] as ColorButton).Rgba);
+            if (hsv.Saturation == 0)    // Hardcode white edge case
+                hsv.Hue = 255;
             configBytes[6] = (byte)(hsv.Hue / 360.0 * 255.0);
 
             return configBytes;

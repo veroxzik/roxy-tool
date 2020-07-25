@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Roxy.Tool.WinForms
@@ -18,5 +19,7 @@ namespace Roxy.Tool.WinForms
                 action();
             }
         }
+
+        public static Action<string> StatusWrite;
     }
 }

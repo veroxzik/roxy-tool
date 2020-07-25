@@ -4,6 +4,7 @@ using Roxy.Lib;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Roxy.Tool.WinForms
@@ -22,9 +23,14 @@ namespace Roxy.Tool.WinForms
         IConfigPanel currentConfig;
 
         bool waitingForBootloader;
-        EventHandler flashElfEvent;
+        EventHandler<FlashEventArgs> flashElfEvent;
 
         bool isElfLoaded = false;
+
+        class FlashEventArgs : EventArgs
+        {
+            public bool ForceDevice { get; set; }
+        }
 
         public MainForm()
         {
@@ -39,6 +45,8 @@ namespace Roxy.Tool.WinForms
 #if ARCIN_BUILD
             this.Text = "arcin Flash and Configuration Tool";
 #endif
+
+            Helper.StatusWrite = StatusWrite;
         }
 
         private void List_Changed(object sender, DeviceListChangedEventArgs e)
@@ -59,7 +67,7 @@ namespace Roxy.Tool.WinForms
                 if (device.VendorID == 7504 && device.ProductID == 24704)
                 {
                     this.device = device;
-                    if(device.GetProductName().Contains("Roxy"))
+                    if(device.GetProductName() != null && device.GetProductName().Contains("Roxy"))
                     {
                         StatusWrite("arcin (Roxy firmware) found!");
                         SetBoard(Board.arcinRoxy, true);
@@ -81,7 +89,7 @@ namespace Roxy.Tool.WinForms
                     EnableConfigBox(false);
 
                     if (waitingForBootloader)
-                        flashElfEvent?.Invoke(this, new EventArgs());
+                        flashElfEvent?.Invoke(this, new FlashEventArgs());
 
                     return;
                 }
@@ -102,7 +110,7 @@ namespace Roxy.Tool.WinForms
                     EnableConfigBox(false);
 
                     if (waitingForBootloader)
-                        flashElfEvent?.Invoke(this, new EventArgs());
+                        flashElfEvent?.Invoke(this, new FlashEventArgs());
 
                     return;
                 }
@@ -225,19 +233,26 @@ namespace Roxy.Tool.WinForms
                         }
                     }
                 }
+                Thread.Sleep(100);
                 waitingForBootloader = true;
             }
             else if (bootloader != null)
-                flashElf(this, new EventArgs());
+                flashElf(this, new FlashEventArgs());
         }
 
-        void flashElf(object sender, EventArgs e)
+        void flashElf(object sender, FlashEventArgs e)
         {
+            HidDevice flasher = null;
             if (bootloader != null)
+                flasher = bootloader;
+            else if (e.ForceDevice && device != null)
+                flasher = device;
+
+            if (flasher != null)
             {
                 StatusWrite("Preparing flash...");
                 HidStream hidStream;
-                if (bootloader.TryOpen(out hidStream))
+                if (flasher.TryOpen(out hidStream))
                 {
                     using (hidStream)
                     {
@@ -283,37 +298,44 @@ namespace Roxy.Tool.WinForms
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
                 {
-                    bool config0 = false;
-                    bool config1 = currentBoard != Board.Roxy;
-                    int attempts = 0;
-                    while ((!config0 || !config1) && attempts < 5)
+                    try
                     {
-                        byte[] configBytes = new byte[64];
-                        configBytes[0] = 0xc0;
-                        hidStream.GetFeature(configBytes);
-                        if (configBytes[0] != 0xc0)
+                        bool config0 = false;
+                        bool config1 = currentBoard != Board.Roxy;
+                        int attempts = 0;
+                        while ((!config0 || !config1) && attempts < 5)
                         {
-                            StatusWrite("Mismatch in config report ID.");
-                            return;
+                            byte[] configBytes = new byte[64];
+                            configBytes[0] = 0xc0;
+                            hidStream.GetFeature(configBytes);
+                            if (configBytes[0] != 0xc0)
+                            {
+                                StatusWrite("Mismatch in config report ID.");
+                                return;
+                            }
+                            else
+                            {
+                                if (configBytes[1] == 0)
+                                {
+                                    currentConfig.PopulateControls(configBytes);
+                                    config0 = true;
+                                }
+                                else if (configBytes[1] == 1)
+                                {
+                                    currentConfig.PopulateRgbControls(configBytes);
+                                    config1 = true;
+                                }
+                                attempts++;
+                            }
                         }
-                        else
+                        if (attempts >= 5)
                         {
-                            if (configBytes[1] == 0)
-                            {
-                                currentConfig.PopulateControls(configBytes);
-                                config0 = true;
-                            }
-                            else if (configBytes[1] == 1)
-                            {
-                                currentConfig.PopulateRgbControls(configBytes);
-                                config1 = true;
-                            }
-                            attempts++;
+                            StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
                         }
                     }
-                    if (attempts >= 5)
+                    catch (Exception ex)
                     {
-                        StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
+                        StatusWrite("Failed to get config. Has the board booted properly?");
                     }
                 }
             }

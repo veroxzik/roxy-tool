@@ -74,13 +74,38 @@ namespace Roxy.Tool.WinForms
                 // Ignore LED2 (bit 4)
                 analogInputCheck.Checked = (config.Flags >> 5 & 0x1) == 0x1;
                 analogButtonsCheck.Checked = (config.Flags >> 6 & 0x1) == 0x1;
-                qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens);
-                qe2Combo.SelectedIndex = GetComboBoxIndex(config.QE2Sens);
-                ps2Combo.SelectedIndex = config.PS2Mode;
-                rgbCombo.SelectedIndex = config.RgbInterface;
+                try { qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens); }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing QE1 Sensitivty. Defaulting to 1:1.");
+                    qe1Combo.SelectedIndex = 0;
+                }
+                try { qe2Combo.SelectedIndex = GetComboBoxIndex(config.QE2Sens); }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing QE2 Sensitivty. Defaulting to 1:1.");
+                    qe2Combo.SelectedIndex = 0;
+                }
+                try { ps2Combo.SelectedIndex = config.PS2Mode; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing PS2 Mode. Defaulting to Disabled.");
+                    ps2Combo.SelectedIndex = 0;
+                }
+                try { rgbCombo.SelectedIndex = config.RgbInterface; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing RGB Interface. Defaulting to Disabled.");
+                    rgbCombo.SelectedIndex = 0;
+                }
                 rgbBrightnessNum.Value = config.Brightness;
                 debounceNum.Value = config.ButtonDebounce;
-                ascEmuCombo.SelectedIndex = config.AscEmulation;
+                try { ascEmuCombo.SelectedIndex = config.AscEmulation; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing ASC Emulation. Defaulting to Disabled.");
+                    ascEmuCombo.SelectedIndex = 0;
+                }
                 axisDebounceNum.Value = config.AxisDebounce;
             });
         }
@@ -93,7 +118,12 @@ namespace Roxy.Tool.WinForms
             byte led2Hue = configBytes[6];
 
             rgbModeCombo.InvokeIfRequired(() => {
-                rgbModeCombo.SelectedIndex = mode;
+                try { rgbModeCombo.SelectedIndex = mode; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing RGB Mode. Defaulting to HID Only.");
+                    rgbModeCombo.SelectedIndex = 0;
+                }
                 color1Picker.SetHue(led1Hue);
                 rgb1ColorButton.BackColor = color1Picker.ApproxColor;
                 color2Picker.SetHue(led2Hue);

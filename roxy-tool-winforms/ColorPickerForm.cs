@@ -72,6 +72,7 @@ namespace Roxy.Tool.WinForms
 
                 colorList[i] = Color.FromArgb(r, g, b);
             }
+            colorList[255] = Color.FromArgb(255, 255, 255);
         }
 
         public void SetHue(int c)

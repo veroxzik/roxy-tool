@@ -301,7 +301,8 @@
             "6:1",
             "8:1",
             "11:1",
-            "16:1"});
+            "16:1",
+            "600 PPR"});
             this.qe2Combo.Location = new System.Drawing.Point(95, 226);
             this.qe2Combo.Name = "qe2Combo";
             this.qe2Combo.Size = new System.Drawing.Size(149, 21);
@@ -335,7 +336,8 @@
             "6:1",
             "8:1",
             "11:1",
-            "16:1"});
+            "16:1",
+            "600 PPR"});
             this.qe1Combo.Location = new System.Drawing.Point(95, 199);
             this.qe1Combo.Name = "qe1Combo";
             this.qe1Combo.Size = new System.Drawing.Size(149, 21);
