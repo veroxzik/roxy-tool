@@ -6,7 +6,7 @@
     <RootNamespace>roxy_tool</RootNamespace>
     <ApplicationIcon>logo-icon.ico</ApplicationIcon>
     <StartupObject />
-    <Version>0.3.3</Version>
+    <Version>0.3.4</Version>
     <Authors>Verox Zik</Authors>
     <Company>VXZK Designs</Company>
     <Product>Roxy Configuration Tool</Product>

@@ -296,7 +296,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Roxy Tool";
             this.configGroupBox.ResumeLayout(false);
             this.configPanel.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
