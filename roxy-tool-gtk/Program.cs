@@ -159,37 +159,44 @@ namespace gtksharp_test
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
                 {
-                    bool config0 = false;
-                    bool config1 = currentBoard != Board.Roxy;
-                    int attempts = 0;
-                    while ((!config0 || !config1) && attempts < 5)
+                    try
                     {
-                        byte[] configBytes = new byte[64];
-                        configBytes[0] = 0xc0;
-                        hidStream.GetFeature(configBytes);
-                        if (configBytes[0] != 0xc0)
+                        bool config0 = false;
+                        bool config1 = currentBoard != Board.Roxy;
+                        int attempts = 0;
+                        while ((!config0 || !config1) && attempts < 5)
                         {
-                            StatusWrite("Mismatch in config report ID.");
-                            return;
+                            byte[] configBytes = new byte[64];
+                            configBytes[0] = 0xc0;
+                            hidStream.GetFeature(configBytes);
+                            if (configBytes[0] != 0xc0)
+                            {
+                                StatusWrite("Mismatch in config report ID.");
+                                return;
+                            }
+                            else
+                            {
+                                if (configBytes[1] == 0)
+                                {
+                                    currentConfig.PopulateControls(configBytes);
+                                    config0 = true;
+                                }
+                                else if (configBytes[1] == 1)
+                                {
+                                    currentConfig.PopulateRgbControls(configBytes);
+                                    config1 = true;
+                                }
+                                attempts++;
+                            }
                         }
-                        else
+                        if (attempts >= 5)
                         {
-                            if (configBytes[1] == 0)
-                            {
-                                currentConfig.PopulateControls(configBytes);
-                                config0 = true;
-                            }
-                            else if (configBytes[1] == 1)
-                            {
-                                currentConfig.PopulateRgbControls(configBytes);
-                                config1 = true;
-                            }
-                            attempts++;
+                            StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
                         }
                     }
-                    if (attempts >= 5)
+                    catch (Exception ex)
                     {
-                        StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
+                        StatusWrite("Exception thrown trying to run GetFeature. Exception: " + ex.Message);
                     }
                 }
             }
