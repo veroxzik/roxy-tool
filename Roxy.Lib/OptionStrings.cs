@@ -10,6 +10,7 @@
         public static readonly string Led2On = "led2On";
         public static readonly string AnalogInput = "analogInput";
         public static readonly string AnalogButtons = "analogButtons";
+        public static readonly string InvertButtonLights = "invertButLights";
         public static readonly string Qe1Sensitivity = "qe1Combo";
         public static readonly string Qe2Sensitivity = "qe2Combo";
         public static readonly string Ps2Mode = "ps2Combo";
@@ -21,5 +22,7 @@
         public static readonly string Rgb2Color = "rgb2Color";
         public static readonly string AscEmulation = "ascEmulation";
         public static readonly string AxisDebounceTime = "axisDebounceTime";
+        public static readonly string ControllerOutput = "controllerOutput";
+        public static readonly string KeyboardMapping = "keyboardMapping";
     }
 }

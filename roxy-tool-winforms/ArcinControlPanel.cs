@@ -77,6 +77,16 @@ namespace Roxy.Tool.WinForms
             return null;
         }
 
+        public void PopulateKeyMappingControls(byte[] configBytes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetKeyMappingBytes()
+        {
+            return null;
+        }
+
         public sbyte GetByteFromComboBox(int index)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;

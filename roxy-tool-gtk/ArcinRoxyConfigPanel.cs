@@ -13,6 +13,7 @@ namespace roxy_tool
     {
         public Grid OptionsGrid { get; private set; }
         private Dictionary<string, Widget> widgetDict = new Dictionary<string, Widget>();
+        private KeyMappingWindow keyMapper = new KeyMappingWindow("Key Mapping");
 
         public ArcinRoxyConfigPanel()
         {
@@ -35,6 +36,8 @@ namespace roxy_tool
             widgetDict[OptionStrings.AnalogInput] = analogInputCheck;
             CheckButton analogButtonsCheck = new CheckButton("Enable Analog Buttons");
             widgetDict[OptionStrings.AnalogButtons] = analogButtonsCheck;
+            CheckButton invertButLightsCheck = new CheckButton("Invert Button Lights");
+            widgetDict[OptionStrings.InvertButtonLights] = invertButLightsCheck;
             Grid flagsGrid = new Grid();
             flagsGrid.RowHomogeneous = true;
             flagsGrid.Attach(hideSerialCheck, 0, 0, 1, 1);
@@ -44,12 +47,11 @@ namespace roxy_tool
             flagsGrid.Attach(led2Check, 0, 4, 1, 1);
             flagsGrid.Attach(analogInputCheck, 0, 5, 1, 1);
             flagsGrid.Attach(analogButtonsCheck, 0, 6, 1, 1);
-            ComboBox qe1Combo = new ComboBox(new string[] { "1:1", "1:2", "1:3", "1:4", "1:6", "1:8", "1:11", "1:16",
-                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1", "600 PPR", "400 PPR", "360 PPR"});
+            flagsGrid.Attach(invertButLightsCheck, 0, 6, 1, 1);
+            ComboBox qe1Combo = new ComboBox(ConfigDefines.QeDropdownStrings.ToArray());
             qe1Combo.Active = 0;
             widgetDict[OptionStrings.Qe1Sensitivity] = qe1Combo;
-            ComboBox qe2Combo = new ComboBox(new string[] { "1:1", "1:2", "1:3", "1:4", "1:6", "1:8", "1:11", "1:16",
-                "2:1", "3:1", "4:1", "6:1", "8:1", "11:1", "16:1", "600 PPR", "400 PPR", "360 PPR"});
+            ComboBox qe2Combo = new ComboBox(ConfigDefines.QeDropdownStrings.ToArray());
             qe2Combo.Active = 0;
             widgetDict[OptionStrings.Qe2Sensitivity] = qe2Combo;
             ComboBox ps2Combo = new ComboBox(new string[] { "Disabled", "Pop'n Music", "IIDX (QE1)", "IIDX (QE2)" });
@@ -98,6 +100,13 @@ namespace roxy_tool
             HBox axisDebounceBox = new HBox(false, 2);
             axisDebounceBox.PackStart(axisDebounceSpinButton, false, true, 2);
             axisDebounceBox.PackStart(msLabel2, false, false, 2);
+            ComboBox outputCombo = new ComboBox(new string[] { "Joystick", "Keyboard", "Joystick + Keyboard" });
+            outputCombo.Active = 0;
+            widgetDict[OptionStrings.ControllerOutput] = outputCombo;
+            Button keyMappingButton = new Button();
+            keyMappingButton.Label = "Keyboard Mapping";
+            keyMappingButton.Clicked += KeyMappingButton_Clicked;
+            widgetDict[OptionStrings.KeyboardMapping] = keyMappingButton;
 
             OptionsGrid.Attach(new Label("Board Label:"), 0, 0, 1, 1);
             OptionsGrid.Attach(boardLabelEntry, 1, 0, 1, 1);
@@ -123,6 +132,10 @@ namespace roxy_tool
             OptionsGrid.Attach(emulationCombo, 1, 7, 1, 1);
             OptionsGrid.Attach(new Label("Axis Debounce Time:"), 0, 8, 1, 1);
             OptionsGrid.Attach(axisDebounceBox, 1, 8, 1, 1);
+            OptionsGrid.Attach(new Label("Controller Output:"), 0, 9, 1, 1);
+            OptionsGrid.Attach(outputCombo, 1, 9, 1, 1);
+            OptionsGrid.Attach(new Label("Key Mapping:"), 0, 10, 1, 1);
+            OptionsGrid.Attach(keyMappingButton, 1, 10, 1, 1);
         }
 
         public byte[] GetConfigBytes()
@@ -130,12 +143,13 @@ namespace roxy_tool
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x00;  // Segment must be 0
-            configBytes[2] = 0x18;  // arcin (Roxy) is 24 bytes
+            configBytes[2] = 0x19;  // arcin (Roxy) is 25 bytes
             configBytes[3] = 0x00;  // Padding byte
             byte[] label = Encoding.ASCII.GetBytes((widgetDict[OptionStrings.BoardLabel] as Entry).Text);
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, configBytes, 4, 12);
             uint flags =
+                Convert.ToUInt32((widgetDict[OptionStrings.InvertButtonLights] as CheckButton).Active) << 7 |
                 Convert.ToUInt32((widgetDict[OptionStrings.AnalogButtons] as CheckButton).Active) << 6 |
                 Convert.ToUInt32((widgetDict[OptionStrings.AnalogInput] as CheckButton).Active) << 5 |
                 Convert.ToUInt32((widgetDict[OptionStrings.Led2On] as CheckButton).Active) << 3 |
@@ -152,6 +166,7 @@ namespace roxy_tool
             configBytes[25] = (byte)(widgetDict[OptionStrings.DebounceTime] as SpinButton).Value;
             configBytes[26] = (byte)(widgetDict[OptionStrings.AscEmulation] as ComboBox).Active;
             configBytes[27] = (byte)(widgetDict[OptionStrings.AxisDebounceTime] as SpinButton).Value;
+            configBytes[28] = (byte)(widgetDict[OptionStrings.ControllerOutput] as ComboBox).Active;
 
             return configBytes;
         }
@@ -168,6 +183,7 @@ namespace roxy_tool
             (widgetDict[OptionStrings.Led2On] as CheckButton).Active = (config.Flags >> 4 & 0x1) == 0x1;
             (widgetDict[OptionStrings.AnalogInput] as CheckButton).Active = (config.Flags >> 5 & 0x1) == 0x1;
             (widgetDict[OptionStrings.AnalogButtons] as CheckButton).Active = (config.Flags >> 6 & 0x1) == 0x1;
+            (widgetDict[OptionStrings.InvertButtonLights] as CheckButton).Active = (config.Flags >> 7 & 0x1) == 0x1;
             (widgetDict[OptionStrings.Qe1Sensitivity] as ComboBox).Active = GetComboBoxIndex(config.QE1Sens);
             (widgetDict[OptionStrings.Qe2Sensitivity] as ComboBox).Active = GetComboBoxIndex(config.QE2Sens);
             (widgetDict[OptionStrings.Ps2Mode] as ComboBox).Active = config.PS2Mode;
@@ -176,6 +192,7 @@ namespace roxy_tool
             (widgetDict[OptionStrings.DebounceTime] as SpinButton).Value = config.ButtonDebounce;
             (widgetDict[OptionStrings.AscEmulation] as ComboBox).Active = config.AscEmulation;
             (widgetDict[OptionStrings.AxisDebounceTime] as SpinButton).Value = config.AxisDebounce;
+            (widgetDict[OptionStrings.ControllerOutput] as ComboBox).Active = config.ControllerOutput;
         }
 
         public void PopulateRgbControls(byte[] configBytes)
@@ -188,6 +205,23 @@ namespace roxy_tool
             return null;
         }
 
+        public void PopulateKeyMappingControls(byte[] configBytes)
+        {
+            keyMapper.SetMapping(configBytes.Skip(4).ToArray());
+        }
+
+        public byte[] GetKeyMappingBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x02;  // Key mapping config is Segment 2
+            configBytes[2] = 0x10;  // Length
+            configBytes[3] = 0x00;  // Padding byte
+            Array.Copy(keyMapper.GetMapping(), 0, configBytes, 4, 16);
+
+            return configBytes;
+        }
+
         public sbyte GetByteFromComboBox(int index)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;
@@ -196,6 +230,11 @@ namespace roxy_tool
         public int GetComboBoxIndex(sbyte sens)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Key == sens).FirstOrDefault().Value;
+        }
+
+        private void KeyMappingButton_Clicked(object sender, EventArgs e)
+        {
+            keyMapper.ShowAll();
         }
     }
 }

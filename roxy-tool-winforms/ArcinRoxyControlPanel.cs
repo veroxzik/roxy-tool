@@ -13,14 +13,20 @@ namespace Roxy.Tool.WinForms
 {
     public partial class ArcinRoxyControlPanel : UserControl, IConfigPanel
     {
+        private KeyMappingForm keyMapper = new KeyMappingForm();
+
         public ArcinRoxyControlPanel()
         {
             InitializeComponent();
+
+            qe1Combo.Items.AddRange(ConfigDefines.QeDropdownStrings.ToArray());
+            qe2Combo.Items.AddRange(ConfigDefines.QeDropdownStrings.ToArray());
 
             qe1Combo.SelectedIndex = 0;
             qe2Combo.SelectedIndex = 0;
             ps2Combo.SelectedIndex = 0;
             ws2812bCombo.SelectedIndex = 0;
+            controllerOutputCombo.SelectedIndex = 0;
         }
 
         public byte[] GetConfigBytes()
@@ -28,12 +34,13 @@ namespace Roxy.Tool.WinForms
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x00;  // Segment must be 0
-            configBytes[2] = 0x18;  // arcin (Roxy) is 24 bytes
+            configBytes[2] = 0x19;  // arcin (Roxy) is 25 bytes
             configBytes[3] = 0x00;  // Padding byte
             byte[] label = Encoding.ASCII.GetBytes(labelText.Text);
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, configBytes, 4, 12);
             uint flags =
+                Convert.ToUInt32(invertLightsCheck.Checked) << 7 |
                 Convert.ToUInt32(analogButtonsCheck.Checked) << 6 |
                 Convert.ToUInt32(analogInputCheck.Checked) << 5 |
                 Convert.ToUInt32(led2Check.Checked) << 4 |
@@ -50,6 +57,7 @@ namespace Roxy.Tool.WinForms
             configBytes[25] = (byte)debounceNum.Value;
             configBytes[26] = (byte)ascEmuCombo.SelectedIndex;
             configBytes[27] = (byte)axisDebounceNum.Value;
+            configBytes[28] = (byte)controllerOutputCombo.SelectedIndex;
 
             return configBytes;
         }
@@ -68,13 +76,45 @@ namespace Roxy.Tool.WinForms
                 led2Check.Checked = (config.Flags >> 4 & 0x1) == 0x1;
                 analogInputCheck.Checked = (config.Flags >> 5 & 0x1) == 0x1;
                 analogButtonsCheck.Checked = (config.Flags >> 6 & 0x1) == 0x1;
-                qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens);
-                qe2Combo.SelectedIndex = GetComboBoxIndex(config.QE2Sens);
-                ps2Combo.SelectedIndex = config.PS2Mode;
-                ws2812bCombo.SelectedIndex = config.RgbInterface < 2 ? config.RgbInterface : 0;
+                invertLightsCheck.Checked = (config.Flags >> 7 & 0x1) == 0x1;
+                try { qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens); }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing QE1 Sensitivty. Defaulting to 1:1.");
+                    qe1Combo.SelectedIndex = 0;
+                }
+                try { qe2Combo.SelectedIndex = GetComboBoxIndex(config.QE2Sens); }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing QE2 Sensitivty. Defaulting to 1:1.");
+                    qe2Combo.SelectedIndex = 0;
+                }
+                try { ps2Combo.SelectedIndex = config.PS2Mode; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing PS2 Mode. Defaulting to Disabled.");
+                    ps2Combo.SelectedIndex = 0;
+                }
+                try { ws2812bCombo.SelectedIndex = config.RgbInterface < 2 ? config.RgbInterface : 0; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing WS2812B Mode. Defaulting to Disabled.");
+                    ws2812bCombo.SelectedIndex = 0;
+                }
                 debounceNum.Value = config.ButtonDebounce;
-                ascEmuCombo.SelectedIndex = config.AscEmulation;
+                try { ascEmuCombo.SelectedIndex = config.AscEmulation; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing ASC Emulation. Defaulting to Disabled.");
+                    ascEmuCombo.SelectedIndex = 0;
+                }
                 axisDebounceNum.Value = config.AxisDebounce;
+                try { controllerOutputCombo.SelectedIndex = config.ControllerOutput; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing Controller Output mode. Defaulting to Joystick.");
+                    controllerOutputCombo.SelectedIndex = 0;
+                }
             });
         }
 
@@ -88,6 +128,23 @@ namespace Roxy.Tool.WinForms
             return null;
         }
 
+        public void PopulateKeyMappingControls(byte[] configBytes)
+        {
+            keyMapper.SetMapping(configBytes.Skip(4).ToArray());
+        }
+
+        public byte[] GetKeyMappingBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x02;  // Key mapping config is Segment 2
+            configBytes[2] = 0x10;  // Length
+            configBytes[3] = 0x00;  // Padding byte
+            Array.Copy(keyMapper.GetMapping(), 0, configBytes, 4, 16);
+
+            return configBytes;
+        }
+
         public sbyte GetByteFromComboBox(int index)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;
@@ -96,6 +153,11 @@ namespace Roxy.Tool.WinForms
         public int GetComboBoxIndex(sbyte sens)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Key == sens).FirstOrDefault().Value;
+        }
+
+        private void keyMapButton_Click(object sender, EventArgs e)
+        {
+            keyMapper.ShowDialog();
         }
     }
 }

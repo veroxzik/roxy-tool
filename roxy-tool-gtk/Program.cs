@@ -25,6 +25,9 @@ namespace gtksharp_test
         static Board currentBoard = Board.None;
         static IConfigPanel currentConfig;
 
+        static List<int> configPages;
+        const int maxConfig = 5;
+
         static RoxyConfigPanel roxyConfigPanel = new RoxyConfigPanel();
         static ArcinConfigPanel arcinConfigPanel = new ArcinConfigPanel();
         static ArcinRoxyConfigPanel arcinRoxyConfigPanel = new ArcinRoxyConfigPanel();
@@ -155,41 +158,56 @@ namespace gtksharp_test
         {
             if (device != null && currentConfig != null)
             {
+                configPages.Clear();
                 StatusWrite("Reading config...");
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
                 {
-                    bool config0 = false;
-                    bool config1 = currentBoard != Board.Roxy;
-                    int attempts = 0;
-                    while ((!config0 || !config1) && attempts < 5)
+                    try
                     {
-                        byte[] configBytes = new byte[64];
-                        configBytes[0] = 0xc0;
-                        hidStream.GetFeature(configBytes);
-                        if (configBytes[0] != 0xc0)
+                        int attempts = 0;
+                        while (attempts < maxConfig)
                         {
-                            StatusWrite("Mismatch in config report ID.");
-                            return;
+                            byte[] configBytes = new byte[64];
+                            configBytes[0] = 0xc0;
+                            hidStream.GetFeature(configBytes);
+                            if (configBytes[0] != 0xc0)
+                            {
+                                StatusWrite("Mismatch in config report ID.");
+                                return;
+                            }
+                            else
+                            {
+                                if (configBytes[1] == 0 && !configPages.Contains(0))
+                                {
+                                    currentConfig.PopulateControls(configBytes);
+                                    configPages.Add(0);
+                                }
+                                else if (configBytes[1] == 1 && !configPages.Contains(1))
+                                {
+                                    currentConfig.PopulateRgbControls(configBytes);
+                                    configPages.Add(1);
+                                }
+                                else if (configBytes[1] == 2 && !configPages.Contains(2))
+                                {
+                                    currentConfig.PopulateKeyMappingControls(configBytes);
+                                    configPages.Add(2);
+                                }
+                                attempts++;
+                            }
+                        }
+                        if (configPages.Count == 0)
+                        {
+                            StatusWrite("Failure to get any config reports.");
                         }
                         else
                         {
-                            if (configBytes[1] == 0)
-                            {
-                                currentConfig.PopulateControls(configBytes);
-                                config0 = true;
-                            }
-                            else if (configBytes[1] == 1)
-                            {
-                                currentConfig.PopulateRgbControls(configBytes);
-                                config1 = true;
-                            }
-                            attempts++;
+                            StatusWrite($"Found {configPages.Count} config reports.");
                         }
                     }
-                    if (attempts >= 5)
+                    catch (Exception ex)
                     {
-                        StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
+                        StatusWrite($"Failed to get config.{Environment.NewLine}- Has the board booted properly?{Environment.NewLine}- Is the correct board selected?");
                     }
                 }
             }
@@ -202,6 +220,7 @@ namespace gtksharp_test
                 StatusWrite("Writing config...");
                 var configBytes = currentConfig.GetConfigBytes();
                 var rgbBytes = currentConfig.GetRgbConfigBytes();
+                var mapBytes = currentConfig.GetKeyMappingBytes();
 
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
@@ -214,6 +233,11 @@ namespace gtksharp_test
                         {
                             hidStream.SetFeature(rgbBytes, 0, 64);
                             StatusWrite("RGB config written.");
+                        }
+                        if (mapBytes != null)
+                        {
+                            hidStream.SetFeature(mapBytes, 0, 64);
+                            StatusWrite("Key Mapping config written.");
                         }
                         hidStream.SetFeature(new byte[] { 0xb0, 0x20 });
                         StatusWrite("Restarting board!");
@@ -383,6 +407,7 @@ theKeithD's python bootloader script
             bootloader = null;
             device = null;
             currentBoard = Board.None;
+            configPages = new List<int>();
             SetFlashWidgets(false);
             var hidDevices = devList.GetHidDevices().ToArray();
             foreach (var dev in devList.GetHidDevices())

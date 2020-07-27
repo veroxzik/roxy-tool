@@ -92,7 +92,7 @@
             this.configGroupBox.Enabled = false;
             this.configGroupBox.Location = new System.Drawing.Point(8, 35);
             this.configGroupBox.Name = "configGroupBox";
-            this.configGroupBox.Size = new System.Drawing.Size(269, 511);
+            this.configGroupBox.Size = new System.Drawing.Size(269, 554);
             this.configGroupBox.TabIndex = 2;
             this.configGroupBox.TabStop = false;
             this.configGroupBox.Text = "Config Options";
@@ -106,7 +106,7 @@
             this.configPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.configPanel.Location = new System.Drawing.Point(3, 16);
             this.configPanel.Name = "configPanel";
-            this.configPanel.Size = new System.Drawing.Size(263, 492);
+            this.configPanel.Size = new System.Drawing.Size(263, 535);
             this.configPanel.TabIndex = 1;
             // 
             // roxyConfigPanel
@@ -114,7 +114,7 @@
             this.roxyConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roxyConfigPanel.Location = new System.Drawing.Point(0, 0);
             this.roxyConfigPanel.Name = "roxyConfigPanel";
-            this.roxyConfigPanel.Size = new System.Drawing.Size(263, 492);
+            this.roxyConfigPanel.Size = new System.Drawing.Size(263, 535);
             this.roxyConfigPanel.TabIndex = 0;
             // 
             // arcinConfigPanel
@@ -122,7 +122,7 @@
             this.arcinConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.arcinConfigPanel.Location = new System.Drawing.Point(0, 0);
             this.arcinConfigPanel.Name = "arcinConfigPanel";
-            this.arcinConfigPanel.Size = new System.Drawing.Size(263, 492);
+            this.arcinConfigPanel.Size = new System.Drawing.Size(263, 535);
             this.arcinConfigPanel.TabIndex = 1;
             // 
             // arcinRoxyControlPanel
@@ -130,7 +130,7 @@
             this.arcinRoxyControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.arcinRoxyControlPanel.Location = new System.Drawing.Point(0, 0);
             this.arcinRoxyControlPanel.Name = "arcinRoxyControlPanel";
-            this.arcinRoxyControlPanel.Size = new System.Drawing.Size(263, 492);
+            this.arcinRoxyControlPanel.Size = new System.Drawing.Size(263, 535);
             this.arcinRoxyControlPanel.TabIndex = 2;
             // 
             // tabPage2
@@ -141,7 +141,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(283, 552);
+            this.tabPage2.Size = new System.Drawing.Size(283, 595);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Config";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -154,7 +154,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(291, 578);
+            this.tabControl1.Size = new System.Drawing.Size(291, 621);
             this.tabControl1.TabIndex = 6;
             // 
             // tabPage3
@@ -166,7 +166,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(283, 552);
+            this.tabPage3.Size = new System.Drawing.Size(283, 571);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Flash";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -223,7 +223,7 @@
             this.statusText.Name = "statusText";
             this.statusText.ReadOnly = true;
             this.statusText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.statusText.Size = new System.Drawing.Size(207, 578);
+            this.statusText.Size = new System.Drawing.Size(207, 621);
             this.statusText.TabIndex = 6;
             // 
             // menuStrip1
@@ -289,7 +289,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(500, 602);
+            this.ClientSize = new System.Drawing.Size(500, 645);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusText);
             this.Controls.Add(this.menuStrip1);

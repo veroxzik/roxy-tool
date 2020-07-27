@@ -150,6 +150,15 @@ namespace roxy_tool
             return configBytes;
         }
 
+        public void PopulateKeyMappingControls(byte[] configBytes)
+        {
+        }
+
+        public byte[] GetKeyMappingBytes()
+        {
+            return null;
+        }
+
         public sbyte GetByteFromComboBox(int index)
         {
             return comboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;

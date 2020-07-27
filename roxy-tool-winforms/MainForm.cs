@@ -2,6 +2,7 @@
 using HidSharp;
 using Roxy.Lib;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,6 +22,9 @@ namespace Roxy.Tool.WinForms
 
         Board currentBoard = Board.None;
         IConfigPanel currentConfig;
+
+        List<int> configPages;
+        const int maxConfig = 5;
 
         bool waitingForBootloader;
         EventHandler<FlashEventArgs> flashElfEvent;
@@ -60,6 +64,7 @@ namespace Roxy.Tool.WinForms
             bootloader = null;
             device = null;
             currentBoard = Board.None;
+            configPages = new List<int>();
             SetFlashButtonStatus(false);
             var hidDevices = devList.GetHidDevices().ToArray();
             foreach (var device in devList.GetHidDevices())
@@ -157,18 +162,26 @@ namespace Roxy.Tool.WinForms
             configGroupBox.InvokeIfRequired(() =>
             {
                 configGroupBox.Enabled = state;
-                configGroupBox.Text = "Config Options (" + currentBoard.ToString() + ")";
+                configGroupBox.Text = $"Config Options ({currentBoard})";
                 switch (currentBoard)
                 {
                     case Board.arcin:
                         currentConfig = arcinConfigPanel;
                         arcinConfigPanel.Visible = true;
+                        arcinRoxyControlPanel.Visible = false;
                         roxyConfigPanel.Visible = false;
                         break;
-                    default:
+                    case Board.arcinRoxy:
+                        currentConfig = arcinRoxyControlPanel;
+                        arcinRoxyControlPanel.Visible = true;
+                        arcinConfigPanel.Visible = false;
+                        roxyConfigPanel.Visible = false;
+                        break;
+                    case Board.Roxy:
                         currentConfig = roxyConfigPanel;
                         roxyConfigPanel.Visible = true;
                         arcinConfigPanel.Visible = false;
+                        arcinRoxyControlPanel.Visible = false;
                         break;
                 }
             });
@@ -294,16 +307,15 @@ namespace Roxy.Tool.WinForms
         {
             if (device != null && currentConfig != null)
             {
+                configPages.Clear();
                 StatusWrite("Reading config...");
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
                 {
                     try
                     {
-                        bool config0 = false;
-                        bool config1 = currentBoard != Board.Roxy;
                         int attempts = 0;
-                        while ((!config0 || !config1) && attempts < 5)
+                        while (attempts < maxConfig)
                         {
                             byte[] configBytes = new byte[64];
                             configBytes[0] = 0xc0;
@@ -315,27 +327,36 @@ namespace Roxy.Tool.WinForms
                             }
                             else
                             {
-                                if (configBytes[1] == 0)
+                                if (configBytes[1] == 0 && !configPages.Contains(0))
                                 {
                                     currentConfig.PopulateControls(configBytes);
-                                    config0 = true;
+                                    configPages.Add(0);
                                 }
-                                else if (configBytes[1] == 1)
+                                else if (configBytes[1] == 1 && !configPages.Contains(1))
                                 {
                                     currentConfig.PopulateRgbControls(configBytes);
-                                    config1 = true;
+                                    configPages.Add(1);
+                                }
+                                else if (configBytes[1] == 2 && !configPages.Contains(2))
+                                {
+                                    currentConfig.PopulateKeyMappingControls(configBytes);
+                                    configPages.Add(2);
                                 }
                                 attempts++;
                             }
                         }
-                        if (attempts >= 5)
+                        if (configPages.Count == 0)
                         {
-                            StatusWrite("Failure to get all config reports. Is the correct firmware flashed?");
+                            StatusWrite("Failure to get any config reports.");
+                        }
+                        else
+                        {
+                            StatusWrite($"Found {configPages.Count} config reports.");
                         }
                     }
                     catch (Exception ex)
                     {
-                        StatusWrite("Failed to get config. Has the board booted properly?");
+                        StatusWrite($"Failed to get config.{Environment.NewLine}- Has the board booted properly?{Environment.NewLine}- Is the correct board selected?");
                     }
                 }
             }
@@ -348,6 +369,7 @@ namespace Roxy.Tool.WinForms
                 StatusWrite("Writing config...");
                 var configBytes = currentConfig.GetConfigBytes();
                 var rgbBytes = currentConfig.GetRgbConfigBytes();
+                var mapBytes = currentConfig.GetKeyMappingBytes();
 
                 HidStream hidStream;
                 if (device.TryOpen(out hidStream))
@@ -361,18 +383,23 @@ namespace Roxy.Tool.WinForms
                             hidStream.SetFeature(rgbBytes, 0, 64);
                             StatusWrite("RGB config written.");
                         }
+                        if (mapBytes != null)
+                        {
+                            hidStream.SetFeature(mapBytes, 0, 64);
+                            StatusWrite("Key Mapping config written.");
+                        }
                         hidStream.SetFeature(new byte[] { 0xb0, 0x20 });
                         StatusWrite("Restarting board!");
                         MessageBox.Show("Write success!");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error writing config:\n" + ex.Message, "Error");
+                        MessageBox.Show($"Error writing config:\n {ex.Message}", "Error");
                     }
                 }
                 else
                 {
-                    StatusWrite("Could not open arcin!");
+                    StatusWrite("Could not open board!");
                 }
             }
         }

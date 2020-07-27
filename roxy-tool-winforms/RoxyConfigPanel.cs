@@ -15,10 +15,14 @@ namespace Roxy.Tool.WinForms
     {
         private ColorPickerForm color1Picker = new ColorPickerForm();
         private ColorPickerForm color2Picker = new ColorPickerForm();
+        private KeyMappingForm keyMapper = new KeyMappingForm();
 
         public RoxyConfigPanel()
         {
             InitializeComponent();
+
+            qe1Combo.Items.AddRange(ConfigDefines.QeDropdownStrings.ToArray());
+            qe2Combo.Items.AddRange(ConfigDefines.QeDropdownStrings.ToArray());
 
             qe1Combo.SelectedIndex = 0;
             qe2Combo.SelectedIndex = 0;
@@ -27,6 +31,7 @@ namespace Roxy.Tool.WinForms
             rgbBrightnessNum.Value = 100;
             rgbModeCombo.SelectedIndex = 0;
             ascEmuCombo.SelectedIndex = 0;
+            controllerOutputCombo.SelectedIndex = 0;
         }
 
         public byte[] GetConfigBytes()
@@ -34,12 +39,13 @@ namespace Roxy.Tool.WinForms
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x00;  // Segment must be 0
-            configBytes[2] = 0x18;  // Roxy is 24 bytes
+            configBytes[2] = 0x19;  // Roxy is 25 bytes
             configBytes[3] = 0x00;  // Padding byte
             byte[] label = Encoding.ASCII.GetBytes(labelText.Text);
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, configBytes, 4, 12);
             uint flags =
+                Convert.ToUInt32(invertLightsCheck.Checked) << 7 |
                 Convert.ToUInt32(analogButtonsCheck.Checked) << 6 |
                 Convert.ToUInt32(analogInputCheck.Checked) << 5 |
                 0 << 4 |    // LED2 bit unused
@@ -56,6 +62,7 @@ namespace Roxy.Tool.WinForms
             configBytes[25] = (byte)debounceNum.Value;
             configBytes[26] = (byte)ascEmuCombo.SelectedIndex;
             configBytes[27] = (byte)axisDebounceNum.Value;
+            configBytes[28] = (byte)controllerOutputCombo.SelectedIndex;
 
             return configBytes;
         }
@@ -74,6 +81,7 @@ namespace Roxy.Tool.WinForms
                 // Ignore LED2 (bit 4)
                 analogInputCheck.Checked = (config.Flags >> 5 & 0x1) == 0x1;
                 analogButtonsCheck.Checked = (config.Flags >> 6 & 0x1) == 0x1;
+                invertLightsCheck.Checked = (config.Flags >> 7 & 0x1) == 0x1;
                 try { qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens); }
                 catch
                 {
@@ -107,6 +115,12 @@ namespace Roxy.Tool.WinForms
                     ascEmuCombo.SelectedIndex = 0;
                 }
                 axisDebounceNum.Value = config.AxisDebounce;
+                try { controllerOutputCombo.SelectedIndex = config.ControllerOutput; }
+                catch
+                {
+                    Helper.StatusWrite?.Invoke("Error parsing Controller Output mode. Defaulting to Joystick.");
+                    controllerOutputCombo.SelectedIndex = 0;
+                }
             });
         }
 
@@ -145,6 +159,23 @@ namespace Roxy.Tool.WinForms
             return configBytes;
         }
 
+        public void PopulateKeyMappingControls(byte[] configBytes)
+        {
+            keyMapper.SetMapping(configBytes.Skip(4).ToArray());
+        }
+
+        public byte[] GetKeyMappingBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x02;  // Key mapping config is Segment 2
+            configBytes[2] = 0x10;  // Length
+            configBytes[3] = 0x00;  // Padding byte
+            Array.Copy(keyMapper.GetMapping(), 0, configBytes, 4, 16);
+
+            return configBytes;
+        }
+
         public sbyte GetByteFromComboBox(int index)
         {
             return ConfigDefines.ComboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;
@@ -169,6 +200,11 @@ namespace Roxy.Tool.WinForms
             {
                 rgb2ColorButton.BackColor = color2Picker.ApproxColor;
             }
+        }
+
+        private void keyMapButton_Click(object sender, EventArgs e)
+        {
+            keyMapper.ShowDialog();
         }
     }
 }

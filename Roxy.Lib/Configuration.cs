@@ -16,6 +16,7 @@ namespace Roxy.Lib
         public byte ButtonDebounce { get; private set; }
         public byte AscEmulation { get; private set; }
         public byte AxisDebounce { get; private set; }
+        public byte ControllerOutput { get; private set; }
 
         public Configuration(byte[] bytes)
         {
@@ -29,6 +30,7 @@ namespace Roxy.Lib
             ButtonDebounce = bytes[25];
             AscEmulation = bytes[26];
             AxisDebounce = bytes[27];
+            ControllerOutput = bytes[28];
         }
     }
 }
