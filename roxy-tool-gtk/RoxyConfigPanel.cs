@@ -36,6 +36,8 @@ namespace roxy_tool
             widgetDict[OptionStrings.AnalogButtons] = analogButtonsCheck;
             CheckButton invertButLightsCheck = new CheckButton("Invert Button Lights");
             widgetDict[OptionStrings.InvertButtonLights] = invertButLightsCheck;
+            CheckButton splitQeCheck = new CheckButton("Enable Split QE1");
+            widgetDict[OptionStrings.SplitQe] = splitQeCheck;
             Grid flagsGrid = new Grid();
             flagsGrid.RowHomogeneous = true;
             flagsGrid.Attach(hideSerialCheck, 0, 0, 1, 1);
@@ -45,6 +47,7 @@ namespace roxy_tool
             flagsGrid.Attach(analogInputCheck, 0, 4, 1, 1);
             flagsGrid.Attach(analogButtonsCheck, 0, 5, 1, 1);
             flagsGrid.Attach(invertButLightsCheck, 0, 6, 1, 1);
+            flagsGrid.Attach(splitQeCheck, 0, 7, 1, 1);
             ComboBox qe1Combo = new ComboBox(ConfigDefines.QeDropdownStrings.ToArray());
             qe1Combo.Active = 0;
             widgetDict[OptionStrings.Qe1Sensitivity] = qe1Combo;
@@ -146,6 +149,7 @@ namespace roxy_tool
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, configBytes, 4, 12);
             uint flags =
+                Convert.ToUInt32((widgetDict[OptionStrings.SplitQe] as CheckButton).Active) << 8 |
                 Convert.ToUInt32((widgetDict[OptionStrings.InvertButtonLights] as CheckButton).Active) << 7 |
                 Convert.ToUInt32((widgetDict[OptionStrings.AnalogButtons] as CheckButton).Active) << 6 |
                 Convert.ToUInt32((widgetDict[OptionStrings.AnalogInput] as CheckButton).Active) << 5 |
@@ -181,6 +185,7 @@ namespace roxy_tool
             (widgetDict[OptionStrings.AnalogInput] as CheckButton).Active = (config.Flags >> 5 & 0x1) == 0x1;
             (widgetDict[OptionStrings.AnalogButtons] as CheckButton).Active = (config.Flags >> 6 & 0x1) == 0x1;
             (widgetDict[OptionStrings.InvertButtonLights] as CheckButton).Active = (config.Flags >> 7 & 0x1) == 0x1;
+            (widgetDict[OptionStrings.SplitQe] as CheckButton).Active = (config.Flags >> 8 & 0x1) == 0x1;
             (widgetDict[OptionStrings.Qe1Sensitivity] as ComboBox).Active = GetComboBoxIndex(config.QE1Sens);
             (widgetDict[OptionStrings.Qe2Sensitivity] as ComboBox).Active = GetComboBoxIndex(config.QE2Sens);
             (widgetDict[OptionStrings.Ps2Mode] as ComboBox).Active = config.PS2Mode;

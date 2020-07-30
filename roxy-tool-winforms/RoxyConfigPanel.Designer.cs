@@ -59,6 +59,7 @@
             this.qe1Combo = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.invertLightsCheck = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.axisDebounceNum = new System.Windows.Forms.NumericUpDown();
@@ -66,7 +67,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.keyMapButton = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
-            this.invertLightsCheck = new System.Windows.Forms.CheckBox();
+            this.splitQE1Check = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.debounceNum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgbBrightnessNum)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -76,7 +77,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(2, 419);
+            this.label10.Location = new System.Drawing.Point(3, 442);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 13);
             this.label10.TabIndex = 67;
@@ -84,7 +85,7 @@
             // 
             // rgb2ColorButton
             // 
-            this.rgb2ColorButton.Location = new System.Drawing.Point(178, 387);
+            this.rgb2ColorButton.Location = new System.Drawing.Point(179, 410);
             this.rgb2ColorButton.Name = "rgb2ColorButton";
             this.rgb2ColorButton.Size = new System.Drawing.Size(69, 23);
             this.rgb2ColorButton.TabIndex = 66;
@@ -95,7 +96,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 392);
+            this.label9.Location = new System.Drawing.Point(4, 415);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 13);
             this.label9.TabIndex = 65;
@@ -103,7 +104,7 @@
             // 
             // rgb1ColorButton
             // 
-            this.rgb1ColorButton.Location = new System.Drawing.Point(93, 387);
+            this.rgb1ColorButton.Location = new System.Drawing.Point(94, 410);
             this.rgb1ColorButton.Name = "rgb1ColorButton";
             this.rgb1ColorButton.Size = new System.Drawing.Size(69, 23);
             this.rgb1ColorButton.TabIndex = 64;
@@ -119,7 +120,7 @@
             "HID Only",
             "RGB1/2 pulse with QE1/2",
             "Turbocharger (TLC59711)"});
-            this.rgbModeCombo.Location = new System.Drawing.Point(94, 360);
+            this.rgbModeCombo.Location = new System.Drawing.Point(95, 383);
             this.rgbModeCombo.Name = "rgbModeCombo";
             this.rgbModeCombo.Size = new System.Drawing.Size(153, 21);
             this.rgbModeCombo.TabIndex = 63;
@@ -127,7 +128,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(2, 363);
+            this.label8.Location = new System.Drawing.Point(3, 386);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(60, 13);
             this.label8.TabIndex = 62;
@@ -136,7 +137,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(223, 336);
+            this.label6.Location = new System.Drawing.Point(224, 359);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(20, 13);
             this.label6.TabIndex = 61;
@@ -144,7 +145,7 @@
             // 
             // debounceNum
             // 
-            this.debounceNum.Location = new System.Drawing.Point(94, 334);
+            this.debounceNum.Location = new System.Drawing.Point(95, 357);
             this.debounceNum.Maximum = new decimal(new int[] {
             255,
             0,
@@ -157,7 +158,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 336);
+            this.label7.Location = new System.Drawing.Point(4, 359);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(83, 13);
             this.label7.TabIndex = 59;
@@ -257,7 +258,7 @@
             "Disabled",
             "IIDX premium",
             "SDVX NEMSYS entry"});
-            this.ascEmuCombo.Location = new System.Drawing.Point(94, 416);
+            this.ascEmuCombo.Location = new System.Drawing.Point(95, 439);
             this.ascEmuCombo.Name = "ascEmuCombo";
             this.ascEmuCombo.Size = new System.Drawing.Size(153, 21);
             this.ascEmuCombo.TabIndex = 68;
@@ -265,7 +266,7 @@
             // rgbPercentLabel
             // 
             this.rgbPercentLabel.AutoSize = true;
-            this.rgbPercentLabel.Location = new System.Drawing.Point(190, 310);
+            this.rgbPercentLabel.Location = new System.Drawing.Point(191, 333);
             this.rgbPercentLabel.Name = "rgbPercentLabel";
             this.rgbPercentLabel.Size = new System.Drawing.Size(54, 13);
             this.rgbPercentLabel.TabIndex = 58;
@@ -273,7 +274,7 @@
             // 
             // rgbBrightnessNum
             // 
-            this.rgbBrightnessNum.Location = new System.Drawing.Point(94, 308);
+            this.rgbBrightnessNum.Location = new System.Drawing.Point(95, 331);
             this.rgbBrightnessNum.Maximum = new decimal(new int[] {
             255,
             0,
@@ -291,7 +292,7 @@
             // rgbBrightnessLabel
             // 
             this.rgbBrightnessLabel.AutoSize = true;
-            this.rgbBrightnessLabel.Location = new System.Drawing.Point(3, 310);
+            this.rgbBrightnessLabel.Location = new System.Drawing.Point(4, 333);
             this.rgbBrightnessLabel.Name = "rgbBrightnessLabel";
             this.rgbBrightnessLabel.Size = new System.Drawing.Size(82, 13);
             this.rgbBrightnessLabel.TabIndex = 56;
@@ -305,7 +306,7 @@
             "Disabled",
             "WS2812B",
             "TLC59711"});
-            this.rgbCombo.Location = new System.Drawing.Point(94, 281);
+            this.rgbCombo.Location = new System.Drawing.Point(95, 304);
             this.rgbCombo.Name = "rgbCombo";
             this.rgbCombo.Size = new System.Drawing.Size(153, 21);
             this.rgbCombo.TabIndex = 55;
@@ -313,7 +314,7 @@
             // rgbModeLabel
             // 
             this.rgbModeLabel.AutoSize = true;
-            this.rgbModeLabel.Location = new System.Drawing.Point(2, 284);
+            this.rgbModeLabel.Location = new System.Drawing.Point(3, 307);
             this.rgbModeLabel.Name = "rgbModeLabel";
             this.rgbModeLabel.Size = new System.Drawing.Size(75, 13);
             this.rgbModeLabel.TabIndex = 54;
@@ -328,7 +329,7 @@
             "Pop\'n Music",
             "IIDX (QE1)",
             "IIDX (QE2)"});
-            this.ps2Combo.Location = new System.Drawing.Point(94, 254);
+            this.ps2Combo.Location = new System.Drawing.Point(95, 277);
             this.ps2Combo.Name = "ps2Combo";
             this.ps2Combo.Size = new System.Drawing.Size(153, 21);
             this.ps2Combo.TabIndex = 53;
@@ -336,7 +337,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(2, 257);
+            this.label5.Location = new System.Drawing.Point(3, 280);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 13);
             this.label5.TabIndex = 52;
@@ -346,7 +347,7 @@
             // 
             this.qe2Combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.qe2Combo.FormattingEnabled = true;
-            this.qe2Combo.Location = new System.Drawing.Point(94, 227);
+            this.qe2Combo.Location = new System.Drawing.Point(95, 250);
             this.qe2Combo.Name = "qe2Combo";
             this.qe2Combo.Size = new System.Drawing.Size(153, 21);
             this.qe2Combo.TabIndex = 51;
@@ -354,7 +355,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(2, 230);
+            this.label4.Location = new System.Drawing.Point(3, 253);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(78, 13);
             this.label4.TabIndex = 50;
@@ -364,7 +365,7 @@
             // 
             this.qe1Combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.qe1Combo.FormattingEnabled = true;
-            this.qe1Combo.Location = new System.Drawing.Point(94, 200);
+            this.qe1Combo.Location = new System.Drawing.Point(95, 223);
             this.qe1Combo.Name = "qe1Combo";
             this.qe1Combo.Size = new System.Drawing.Size(153, 21);
             this.qe1Combo.TabIndex = 49;
@@ -372,7 +373,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 203);
+            this.label3.Location = new System.Drawing.Point(4, 226);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 13);
             this.label3.TabIndex = 48;
@@ -387,15 +388,26 @@
             this.flowLayoutPanel1.Controls.Add(this.analogInputCheck);
             this.flowLayoutPanel1.Controls.Add(this.analogButtonsCheck);
             this.flowLayoutPanel1.Controls.Add(this.invertLightsCheck);
+            this.flowLayoutPanel1.Controls.Add(this.splitQE1Check);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(95, 29);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(152, 165);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(152, 188);
             this.flowLayoutPanel1.TabIndex = 47;
+            // 
+            // invertLightsCheck
+            // 
+            this.invertLightsCheck.AutoSize = true;
+            this.invertLightsCheck.Location = new System.Drawing.Point(3, 141);
+            this.invertLightsCheck.Name = "invertLightsCheck";
+            this.invertLightsCheck.Size = new System.Drawing.Size(118, 17);
+            this.invertLightsCheck.TabIndex = 6;
+            this.invertLightsCheck.Text = "Invert Button Lights";
+            this.invertLightsCheck.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(223, 445);
+            this.label11.Location = new System.Drawing.Point(224, 468);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(20, 13);
             this.label11.TabIndex = 74;
@@ -404,7 +416,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 445);
+            this.label12.Location = new System.Drawing.Point(4, 468);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(79, 13);
             this.label12.TabIndex = 72;
@@ -412,7 +424,7 @@
             // 
             // axisDebounceNum
             // 
-            this.axisDebounceNum.Location = new System.Drawing.Point(94, 443);
+            this.axisDebounceNum.Location = new System.Drawing.Point(95, 466);
             this.axisDebounceNum.Maximum = new decimal(new int[] {
             255,
             0,
@@ -430,7 +442,7 @@
             "Joystick",
             "Keyboard",
             "Joystick + Keyboard"});
-            this.controllerOutputCombo.Location = new System.Drawing.Point(94, 469);
+            this.controllerOutputCombo.Location = new System.Drawing.Point(95, 492);
             this.controllerOutputCombo.Name = "controllerOutputCombo";
             this.controllerOutputCombo.Size = new System.Drawing.Size(153, 21);
             this.controllerOutputCombo.TabIndex = 76;
@@ -438,7 +450,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(2, 472);
+            this.label13.Location = new System.Drawing.Point(3, 495);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(86, 13);
             this.label13.TabIndex = 75;
@@ -446,7 +458,7 @@
             // 
             // keyMapButton
             // 
-            this.keyMapButton.Location = new System.Drawing.Point(93, 496);
+            this.keyMapButton.Location = new System.Drawing.Point(94, 519);
             this.keyMapButton.Name = "keyMapButton";
             this.keyMapButton.Size = new System.Drawing.Size(154, 23);
             this.keyMapButton.TabIndex = 77;
@@ -457,21 +469,21 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(2, 501);
+            this.label14.Location = new System.Drawing.Point(3, 524);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(69, 13);
             this.label14.TabIndex = 78;
             this.label14.Text = "Key Mapping";
             // 
-            // invertLightsCheck
+            // splitQE1Check
             // 
-            this.invertLightsCheck.AutoSize = true;
-            this.invertLightsCheck.Location = new System.Drawing.Point(3, 141);
-            this.invertLightsCheck.Name = "invertLightsCheck";
-            this.invertLightsCheck.Size = new System.Drawing.Size(118, 17);
-            this.invertLightsCheck.TabIndex = 6;
-            this.invertLightsCheck.Text = "Invert Button Lights";
-            this.invertLightsCheck.UseVisualStyleBackColor = true;
+            this.splitQE1Check.AutoSize = true;
+            this.splitQE1Check.Location = new System.Drawing.Point(3, 164);
+            this.splitQE1Check.Name = "splitQE1Check";
+            this.splitQE1Check.Size = new System.Drawing.Size(106, 17);
+            this.splitQE1Check.TabIndex = 7;
+            this.splitQE1Check.Text = "Enable Split QE1";
+            this.splitQE1Check.UseVisualStyleBackColor = true;
             // 
             // RoxyConfigPanel
             // 
@@ -510,7 +522,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "RoxyConfigPanel";
-            this.Size = new System.Drawing.Size(250, 529);
+            this.Size = new System.Drawing.Size(250, 553);
             ((System.ComponentModel.ISupportInitialize)(this.debounceNum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgbBrightnessNum)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -562,5 +574,6 @@
         private System.Windows.Forms.Button keyMapButton;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.CheckBox invertLightsCheck;
+        private System.Windows.Forms.CheckBox splitQE1Check;
     }
 }

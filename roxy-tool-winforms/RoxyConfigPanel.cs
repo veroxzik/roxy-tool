@@ -45,6 +45,7 @@ namespace Roxy.Tool.WinForms
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, configBytes, 4, 12);
             uint flags =
+                Convert.ToUInt32(splitQE1Check.Checked) << 8 |
                 Convert.ToUInt32(invertLightsCheck.Checked) << 7 |
                 Convert.ToUInt32(analogButtonsCheck.Checked) << 6 |
                 Convert.ToUInt32(analogInputCheck.Checked) << 5 |
@@ -82,6 +83,7 @@ namespace Roxy.Tool.WinForms
                 analogInputCheck.Checked = (config.Flags >> 5 & 0x1) == 0x1;
                 analogButtonsCheck.Checked = (config.Flags >> 6 & 0x1) == 0x1;
                 invertLightsCheck.Checked = (config.Flags >> 7 & 0x1) == 0x1;
+                splitQE1Check.Checked = (config.Flags >> 8 & 0x1) == 0x1;
                 try { qe1Combo.SelectedIndex = GetComboBoxIndex(config.QE1Sens); }
                 catch
                 {
