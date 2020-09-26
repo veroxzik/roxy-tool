@@ -127,6 +127,14 @@ namespace Roxy.Lib
             new KeyEntry("Alt",  242 ),
             new KeyEntry("Windows",  243 )
         };
+
+        public static readonly List<String> ButtonLightModes = new List<string>()
+        {
+            "Standard",
+            "Standard (Invert)",
+            "Fade Out",
+            "Fade Out (Invert)"
+        };
     }
 
     public class KeyEntry

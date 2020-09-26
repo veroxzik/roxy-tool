@@ -1,6 +1,6 @@
 ﻿namespace Roxy.Tool.WinForms
 {
-    partial class KeyMappingForm
+    partial class ButtonLightModeForm
     {
         /// <summary>
         /// Required designer variable.
@@ -54,20 +54,16 @@
             this.label11 = new System.Windows.Forms.Label();
             this.button12Combo = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.axisYNegCombo = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.axisYPosCombo = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.axisXNegCombo = new System.Windows.Forms.ComboBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.axisXPosCombo = new System.Windows.Forms.ComboBox();
-            this.label16 = new System.Windows.Forms.Label();
+            this.fadeDurationNum = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.fadeDurationNum)).BeginInit();
             this.SuspendLayout();
             // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(58, 823);
+            this.okButton.Location = new System.Drawing.Point(58, 659);
             this.okButton.Margin = new System.Windows.Forms.Padding(6);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(138, 42);
@@ -79,7 +75,7 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(206, 823);
+            this.cancelButton.Location = new System.Drawing.Point(206, 659);
             this.cancelButton.Margin = new System.Windows.Forms.Padding(6);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(138, 42);
@@ -91,7 +87,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 17);
+            this.label1.Location = new System.Drawing.Point(15, 18);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 25);
@@ -121,10 +117,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 66);
+            this.label2.Location = new System.Drawing.Point(15, 64);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 25);
+            this.label2.Size = new System.Drawing.Size(84, 25);
             this.label2.TabIndex = 4;
             this.label2.Text = "Button 2";
             // 
@@ -141,10 +137,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 116);
+            this.label3.Location = new System.Drawing.Point(15, 114);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 25);
+            this.label3.Size = new System.Drawing.Size(84, 25);
             this.label3.TabIndex = 6;
             this.label3.Text = "Button 3";
             // 
@@ -161,10 +157,10 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 166);
+            this.label4.Location = new System.Drawing.Point(15, 164);
             this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 25);
+            this.label4.Size = new System.Drawing.Size(84, 25);
             this.label4.TabIndex = 8;
             this.label4.Text = "Button 4";
             // 
@@ -181,10 +177,10 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 216);
+            this.label5.Location = new System.Drawing.Point(15, 213);
             this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 25);
+            this.label5.Size = new System.Drawing.Size(84, 25);
             this.label5.TabIndex = 10;
             this.label5.Text = "Button 5";
             // 
@@ -201,10 +197,10 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(22, 266);
+            this.label6.Location = new System.Drawing.Point(15, 263);
             this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(79, 25);
+            this.label6.Size = new System.Drawing.Size(84, 25);
             this.label6.TabIndex = 12;
             this.label6.Text = "Button 6";
             // 
@@ -221,10 +217,10 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(22, 316);
+            this.label7.Location = new System.Drawing.Point(15, 313);
             this.label7.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(79, 25);
+            this.label7.Size = new System.Drawing.Size(84, 25);
             this.label7.TabIndex = 14;
             this.label7.Text = "Button 7";
             // 
@@ -241,10 +237,10 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(22, 366);
+            this.label8.Location = new System.Drawing.Point(15, 363);
             this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(79, 25);
+            this.label8.Size = new System.Drawing.Size(84, 25);
             this.label8.TabIndex = 16;
             this.label8.Text = "Button 8";
             // 
@@ -261,10 +257,10 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 415);
+            this.label9.Location = new System.Drawing.Point(15, 413);
             this.label9.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 25);
+            this.label9.Size = new System.Drawing.Size(84, 25);
             this.label9.TabIndex = 18;
             this.label9.Text = "Button 9";
             // 
@@ -281,10 +277,10 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(22, 465);
+            this.label10.Location = new System.Drawing.Point(15, 463);
             this.label10.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(90, 25);
+            this.label10.Size = new System.Drawing.Size(95, 25);
             this.label10.TabIndex = 20;
             this.label10.Text = "Button 10";
             // 
@@ -301,10 +297,10 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(22, 515);
+            this.label11.Location = new System.Drawing.Point(15, 513);
             this.label11.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(90, 25);
+            this.label11.Size = new System.Drawing.Size(95, 25);
             this.label11.TabIndex = 22;
             this.label11.Text = "Button 11";
             // 
@@ -321,106 +317,54 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(22, 565);
+            this.label12.Location = new System.Drawing.Point(15, 562);
             this.label12.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(90, 25);
+            this.label12.Size = new System.Drawing.Size(95, 25);
             this.label12.TabIndex = 24;
             this.label12.Text = "Button 12";
-            // 
-            // axisYNegCombo
-            // 
-            this.axisYNegCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.axisYNegCombo.FormattingEnabled = true;
-            this.axisYNegCombo.Location = new System.Drawing.Point(125, 759);
-            this.axisYNegCombo.Margin = new System.Windows.Forms.Padding(6);
-            this.axisYNegCombo.Name = "axisYNegCombo";
-            this.axisYNegCombo.Size = new System.Drawing.Size(219, 32);
-            this.axisYNegCombo.TabIndex = 33;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(22, 764);
+            this.label13.Location = new System.Drawing.Point(306, 610);
             this.label13.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(75, 25);
-            this.label13.TabIndex = 32;
-            this.label13.Text = "Axis Y-";
-            // 
-            // axisYPosCombo
-            // 
-            this.axisYPosCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.axisYPosCombo.FormattingEnabled = true;
-            this.axisYPosCombo.Location = new System.Drawing.Point(125, 709);
-            this.axisYPosCombo.Margin = new System.Windows.Forms.Padding(6);
-            this.axisYPosCombo.Name = "axisYPosCombo";
-            this.axisYPosCombo.Size = new System.Drawing.Size(219, 32);
-            this.axisYPosCombo.TabIndex = 31;
+            this.label13.Size = new System.Drawing.Size(38, 25);
+            this.label13.TabIndex = 77;
+            this.label13.Text = "ms";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(22, 714);
+            this.label14.Location = new System.Drawing.Point(15, 610);
             this.label14.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 25);
-            this.label14.TabIndex = 30;
-            this.label14.Text = "Axis Y+";
+            this.label14.Size = new System.Drawing.Size(106, 25);
+            this.label14.TabIndex = 75;
+            this.label14.Text = "Fade Time";
             // 
-            // axisXNegCombo
+            // fadeDurationNum
             // 
-            this.axisXNegCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.axisXNegCombo.FormattingEnabled = true;
-            this.axisXNegCombo.Location = new System.Drawing.Point(125, 659);
-            this.axisXNegCombo.Margin = new System.Windows.Forms.Padding(6);
-            this.axisXNegCombo.Name = "axisXNegCombo";
-            this.axisXNegCombo.Size = new System.Drawing.Size(219, 32);
-            this.axisXNegCombo.TabIndex = 29;
+            this.fadeDurationNum.Location = new System.Drawing.Point(125, 608);
+            this.fadeDurationNum.Margin = new System.Windows.Forms.Padding(6);
+            this.fadeDurationNum.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.fadeDurationNum.Name = "fadeDurationNum";
+            this.fadeDurationNum.Size = new System.Drawing.Size(174, 29);
+            this.fadeDurationNum.TabIndex = 76;
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(22, 665);
-            this.label15.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(76, 25);
-            this.label15.TabIndex = 28;
-            this.label15.Text = "Axis X-";
-            // 
-            // axisXPosCombo
-            // 
-            this.axisXPosCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.axisXPosCombo.FormattingEnabled = true;
-            this.axisXPosCombo.Location = new System.Drawing.Point(125, 609);
-            this.axisXPosCombo.Margin = new System.Windows.Forms.Padding(6);
-            this.axisXPosCombo.Name = "axisXPosCombo";
-            this.axisXPosCombo.Size = new System.Drawing.Size(219, 32);
-            this.axisXPosCombo.TabIndex = 27;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(22, 615);
-            this.label16.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(81, 25);
-            this.label16.TabIndex = 26;
-            this.label16.Text = "Axis X+";
-            // 
-            // KeyMappingForm
+            // ButtonLightModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(369, 890);
-            this.Controls.Add(this.axisYNegCombo);
+            this.ClientSize = new System.Drawing.Size(369, 716);
             this.Controls.Add(this.label13);
-            this.Controls.Add(this.axisYPosCombo);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.axisXNegCombo);
-            this.Controls.Add(this.label15);
-            this.Controls.Add(this.axisXPosCombo);
-            this.Controls.Add(this.label16);
+            this.Controls.Add(this.fadeDurationNum);
             this.Controls.Add(this.button12Combo);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.button11Combo);
@@ -451,10 +395,11 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "KeyMappingForm";
+            this.Name = "ButtonLightModeForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Key Mapping";
+            this.Text = "Button LED Mode";
+            ((System.ComponentModel.ISupportInitialize)(this.fadeDurationNum)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -488,13 +433,8 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox button12Combo;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox axisYNegCombo;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.ComboBox axisYPosCombo;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ComboBox axisXNegCombo;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox axisXPosCombo;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown fadeDurationNum;
     }
 }

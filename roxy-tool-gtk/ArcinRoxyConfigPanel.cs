@@ -14,6 +14,7 @@ namespace roxy_tool
         public Grid OptionsGrid { get; private set; }
         private Dictionary<string, Widget> widgetDict = new Dictionary<string, Widget>();
         private KeyMappingWindow keyMapper = new KeyMappingWindow("Key Mapping");
+        private ButtonLightModeWindow ledModeMapper = new ButtonLightModeWindow("Button LED Mode");
 
         public ArcinRoxyConfigPanel()
         {
@@ -107,6 +108,10 @@ namespace roxy_tool
             keyMappingButton.Label = "Keyboard Mapping";
             keyMappingButton.Clicked += KeyMappingButton_Clicked;
             widgetDict[OptionStrings.KeyboardMapping] = keyMappingButton;
+            Button buttonLightMode = new Button();
+            buttonLightMode.Label = "Button LED Mode";
+            buttonLightMode.Clicked += ButtonLightMode_Clicked;
+            widgetDict[OptionStrings.ButtonLightMode] = buttonLightMode;
 
             OptionsGrid.Attach(new Label("Board Label:"), 0, 0, 1, 1);
             OptionsGrid.Attach(boardLabelEntry, 1, 0, 1, 1);
@@ -136,6 +141,8 @@ namespace roxy_tool
             OptionsGrid.Attach(outputCombo, 1, 9, 1, 1);
             OptionsGrid.Attach(new Label("Key Mapping:"), 0, 10, 1, 1);
             OptionsGrid.Attach(keyMappingButton, 1, 10, 1, 1);
+            OptionsGrid.Attach(new Label("Button LED Mode:"), 0, 11, 1, 1);
+            OptionsGrid.Attach(buttonLightMode, 1, 11, 1, 1);
         }
 
         public byte[] GetConfigBytes()
@@ -208,6 +215,7 @@ namespace roxy_tool
         public void PopulateKeyMappingControls(byte[] configBytes)
         {
             keyMapper.SetMapping(configBytes.Skip(4).ToArray());
+            ledModeMapper.SetMapping(configBytes.Skip(26).ToArray());
         }
 
         public byte[] GetKeyMappingBytes()
@@ -215,9 +223,11 @@ namespace roxy_tool
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x02;  // Key mapping config is Segment 2
-            configBytes[2] = 0x10;  // Length
+            configBytes[2] = 0x1E;  // Length
             configBytes[3] = 0x00;  // Padding byte
             Array.Copy(keyMapper.GetMapping(), 0, configBytes, 4, 16);
+            // 6 bytes of joystick remap (one nibble per button)
+            Array.Copy(ledModeMapper.GetMapping(), 0, configBytes, 26, 8);
 
             return configBytes;
         }
@@ -235,6 +245,11 @@ namespace roxy_tool
         private void KeyMappingButton_Clicked(object sender, EventArgs e)
         {
             keyMapper.ShowAll();
+        }
+
+        private void ButtonLightMode_Clicked(object sender, EventArgs e)
+        {
+            ledModeMapper.ShowAll();
         }
     }
 }

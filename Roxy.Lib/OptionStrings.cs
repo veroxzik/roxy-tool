@@ -25,5 +25,6 @@
         public static readonly string AxisDebounceTime = "axisDebounceTime";
         public static readonly string ControllerOutput = "controllerOutput";
         public static readonly string KeyboardMapping = "keyboardMapping";
+        public static readonly string ButtonLightMode = "buttonLightMode";
     }
 }

@@ -14,6 +14,7 @@ namespace Roxy.Tool.WinForms
     public partial class ArcinRoxyControlPanel : UserControl, IConfigPanel
     {
         private KeyMappingForm keyMapper = new KeyMappingForm();
+        private ButtonLightModeForm ledModeForm = new ButtonLightModeForm();
 
         public ArcinRoxyControlPanel()
         {
@@ -131,6 +132,7 @@ namespace Roxy.Tool.WinForms
         public void PopulateKeyMappingControls(byte[] configBytes)
         {
             keyMapper.SetMapping(configBytes.Skip(4).ToArray());
+            ledModeForm.SetMapping(configBytes.Skip(26).ToArray());
         }
 
         public byte[] GetKeyMappingBytes()
@@ -138,9 +140,11 @@ namespace Roxy.Tool.WinForms
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x02;  // Key mapping config is Segment 2
-            configBytes[2] = 0x10;  // Length
+            configBytes[2] = 0x1E;  // Length
             configBytes[3] = 0x00;  // Padding byte
             Array.Copy(keyMapper.GetMapping(), 0, configBytes, 4, 16);
+            // 6 bytes of joystick remap (one nibble per button)
+            Array.Copy(ledModeForm.GetMapping(), 0, configBytes, 26, 8);
 
             return configBytes;
         }
@@ -158,6 +162,11 @@ namespace Roxy.Tool.WinForms
         private void keyMapButton_Click(object sender, EventArgs e)
         {
             keyMapper.ShowDialog();
+        }
+
+        private void buttonLedModeButton_Click(object sender, EventArgs e)
+        {
+            ledModeForm.ShowDialog();
         }
     }
 }

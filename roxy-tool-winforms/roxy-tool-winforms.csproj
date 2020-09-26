@@ -74,6 +74,12 @@
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
+    <Compile Include="ButtonLightModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ButtonLightModeForm.Designer.cs">
+      <DependentUpon>ButtonLightModeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="KeyMappingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ColorPickerForm.resx">
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ButtonLightModeForm.resx">
+      <DependentUpon>ButtonLightModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KeyMappingForm.resx">
       <DependentUpon>KeyMappingForm.cs</DependentUpon>
