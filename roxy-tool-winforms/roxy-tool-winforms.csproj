@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DeviceSelectionComboBoxItem.cs" />
     <Compile Include="RoxyConfigPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

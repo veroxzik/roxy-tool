@@ -51,6 +51,7 @@
             this.arcinSelectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licensesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deviceListComboBox = new System.Windows.Forms.ComboBox();
             this.configGroupBox.SuspendLayout();
             this.configPanel.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -111,6 +112,7 @@
             // 
             // roxyConfigPanel
             // 
+            this.roxyConfigPanel.AutoScroll = true;
             this.roxyConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roxyConfigPanel.Location = new System.Drawing.Point(0, 0);
             this.roxyConfigPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
@@ -120,6 +122,7 @@
             // 
             // arcinConfigPanel
             // 
+            this.arcinConfigPanel.AutoScroll = true;
             this.arcinConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.arcinConfigPanel.Location = new System.Drawing.Point(0, 0);
             this.arcinConfigPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
@@ -129,6 +132,7 @@
             // 
             // arcinRoxyControlPanel
             // 
+            this.arcinRoxyControlPanel.AutoScroll = true;
             this.arcinRoxyControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.arcinRoxyControlPanel.Location = new System.Drawing.Point(0, 0);
             this.arcinRoxyControlPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
@@ -138,6 +142,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.AutoScroll = true;
             this.tabPage2.Controls.Add(this.configGroupBox);
             this.tabPage2.Controls.Add(this.writeConfigButton);
             this.tabPage2.Controls.Add(this.readConfigButton);
@@ -162,6 +167,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.AutoScroll = true;
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.loadElfButton);
             this.tabPage3.Controls.Add(this.filenameText);
@@ -289,12 +295,24 @@
             this.licensesToolStripMenuItem.Text = "Licenses";
             this.licensesToolStripMenuItem.Click += new System.EventHandler(this.licensesToolStripMenuItem_Click);
             // 
+            // deviceListComboBox
+            // 
+            this.deviceListComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deviceListComboBox.FormattingEnabled = true;
+            this.deviceListComboBox.ItemHeight = 20;
+            this.deviceListComboBox.Location = new System.Drawing.Point(250, 1);
+            this.deviceListComboBox.Name = "deviceListComboBox";
+            this.deviceListComboBox.Size = new System.Drawing.Size(250, 28);
+            this.deviceListComboBox.TabIndex = 8;
+            this.deviceListComboBox.SelectionChangeCommitted += new System.EventHandler(this.deviceListComboBox_OnSelectionChangeCommited);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(500, 687);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.deviceListComboBox);
             this.Controls.Add(this.statusText);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -338,5 +356,6 @@
         private ArcinRoxyControlPanel arcinRoxyControlPanel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem arcinRoxySelectMenuItem;
+        private System.Windows.Forms.ComboBox deviceListComboBox;
     }
 }

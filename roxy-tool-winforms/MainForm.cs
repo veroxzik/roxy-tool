@@ -60,85 +60,108 @@ namespace Roxy.Tool.WinForms
 
         private void LookForDevices()
         {
+            deviceListComboBox.Items.Clear();
+            configPages = new List<int>();
             // Look for bootloader and for arcin
             bootloader = null;
             device = null;
             currentBoard = Board.None;
-            configPages = new List<int>();
             SetFlashButtonStatus(false);
-            var hidDevices = devList.GetHidDevices().ToArray();
+            
             foreach (var device in devList.GetHidDevices())
             {
+                var deviceComboBoxItem = new DeviceSelectionComboxBoxItem() { Device = device };
+
                 if (device.VendorID == 7504 && device.ProductID == 24704)
                 {
-                    this.device = device;
                     if(device.GetProductName() != null && device.GetProductName().Contains("Roxy"))
                     {
-                        StatusWrite("arcin (Roxy firmware) found!");
-                        SetBoard(Board.arcinRoxy, true);
+                        deviceComboBoxItem.Board = Board.arcinRoxy;
+                        deviceComboBoxItem.Name = "Arcin Roxy";
                     }
                     else
                     {
-                        StatusWrite("arcin found!");
-                        SetBoard(Board.arcin, true);
+                        deviceComboBoxItem.Board = Board.arcin;
+                        deviceComboBoxItem.Name = "Arcin";
                     }
-                    SetFlashButtonStatus(isElfLoaded);
-                    readConfigButton_Click(this, new EventArgs());
-                    return;
                 }
-                if (device.VendorID == 7504 && device.ProductID == 24708)
+                else if (device.VendorID == 7504 && device.ProductID == 24708)
                 {
-                    bootloader = device;
-                    StatusWrite("arcin bootloader found!");
-                    SetFlashButtonStatus(isElfLoaded);
-                    EnableConfigBox(false);
+                    deviceComboBoxItem.Board = Board.arcin;
+                    deviceComboBoxItem.Name = "Arcin";
+                    deviceComboBoxItem.IsBootLoader = true;
 
-                    if (waitingForBootloader)
-                        flashElfEvent?.Invoke(this, new FlashEventArgs());
+                    // if (waitingForBootloader)
+                    //    flashElfEvent?.Invoke(this, new FlashEventArgs());
+                }
+                else if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0002)
+                {
+                    deviceComboBoxItem.Board = Board.Roxy;
+                    deviceComboBoxItem.Name = "Roxy";
+                    //StatusWrite("Roxy found!");
+                    //SetFlashButtonStatus(isElfLoaded);
+                    //SetBoard(Board.Roxy, true);
+                    //readConfigButton_Click(this, new EventArgs());
+                }
+                else if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0001)
+                {
+                    deviceComboBoxItem.Board = Board.Roxy;
+                    deviceComboBoxItem.IsBootLoader = true;
+                    deviceComboBoxItem.Name = "Roxy";
+                    //StatusWrite("Roxy bootloader found!");
+                    //SetFlashButtonStatus(isElfLoaded);
+                    //EnableConfigBox(false);
 
-                    return;
+                    //if (waitingForBootloader)
+                    //    flashElfEvent?.Invoke(this, new FlashEventArgs());
                 }
-                if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0002)
+                else if (device.VendorID == 0x1CCF && device.ProductID == 0x8048)
                 {
-                    this.device = device;
-                    StatusWrite("Roxy found!");
-                    SetFlashButtonStatus(isElfLoaded);
-                    SetBoard(Board.Roxy, true);
-                    readConfigButton_Click(this, new EventArgs());
-                    return;
+                    deviceComboBoxItem.Board = Board.Roxy;
+                    deviceComboBoxItem.Name = "IIDX premium controller (probably a Roxy)";
                 }
-                if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0001)
+                else if (device.VendorID == 0x1CCF && device.ProductID == 0x101C)
                 {
-                    bootloader = device;
-                    StatusWrite("Roxy bootloader found!");
-                    SetFlashButtonStatus(isElfLoaded);
-                    EnableConfigBox(false);
+                    deviceComboBoxItem.Board = Board.Roxy;
+                    deviceComboBoxItem.Name = "SDVX NEMSYS entry controller (probably a Roxy)";
+                }
+                else
+                {
+                    continue;
+                }
+                
+                deviceListComboBox.Items.Add(deviceComboBoxItem);
+            }
 
-                    if (waitingForBootloader)
-                        flashElfEvent?.Invoke(this, new FlashEventArgs());
+            if (deviceListComboBox.Items.Count > 0)
+            {
+                deviceListComboBox.SelectedIndex = 0;
+                deviceListComboBox_OnSelectionChangeCommited(this, new EventArgs());
+            }
+        }
 
-                    return;
-                }
-                if (device.VendorID == 0x1CCF && device.ProductID == 0x8048)
+        private void deviceListComboBox_OnSelectionChangeCommited(object sender, EventArgs e)
+        {
+            var selection = (DeviceSelectionComboxBoxItem) deviceListComboBox.SelectedItem;
+            
+            if (selection.IsBootLoader)
+            {
+                this.bootloader = selection.Device;
+                if (waitingForBootloader)
                 {
-                    this.device = device;
-                    StatusWrite("IIDX premium controller (probably a Roxy) found!");
-                    SetFlashButtonStatus(isElfLoaded);
-                    SetBoard(Board.Roxy, true);
-                    readConfigButton_Click(this, new EventArgs());
-                    return;
-                }
-                if (device.VendorID == 0x1CCF && device.ProductID == 0x101C)
-                {
-                    this.device = device;
-                    StatusWrite("SDVX NEMSYS entry controller (probably a Roxy) found!");
-                    SetFlashButtonStatus(isElfLoaded);
-                    SetBoard(Board.Roxy, true);
-                    readConfigButton_Click(this, new EventArgs());
-                    return;
+                    flashElfEvent?.Invoke(this, new FlashEventArgs());
                 }
             }
-            EnableConfigBox(false);
+            else
+            {
+                this.device = selection.Device;
+                readConfigButton_Click(this, new EventArgs());
+            }
+            StatusWrite($"{selection.Name}{(selection.IsBootLoader ? " bootloader" : "")} selected!");
+
+            SetFlashButtonStatus(isElfLoaded && selection.IsBootLoader);
+            EnableConfigBox(!selection.IsBootLoader);
+            SetBoard(selection.Board, !selection.IsBootLoader);
         }
 
         void SetFlashButtonStatus(bool state)
