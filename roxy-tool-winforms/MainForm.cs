@@ -4,7 +4,6 @@ using Roxy.Lib;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -90,30 +89,17 @@ namespace Roxy.Tool.WinForms
                     deviceComboBoxItem.Board = Board.arcin;
                     deviceComboBoxItem.Name = "Arcin";
                     deviceComboBoxItem.IsBootLoader = true;
-
-                    // if (waitingForBootloader)
-                    //    flashElfEvent?.Invoke(this, new FlashEventArgs());
                 }
                 else if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0002)
                 {
                     deviceComboBoxItem.Board = Board.Roxy;
                     deviceComboBoxItem.Name = "Roxy";
-                    //StatusWrite("Roxy found!");
-                    //SetFlashButtonStatus(isElfLoaded);
-                    //SetBoard(Board.Roxy, true);
-                    //readConfigButton_Click(this, new EventArgs());
                 }
                 else if (device.VendorID == 0x16D0 && device.ProductID == 0x0F8B && device.ReleaseNumberBcd == 0x0001)
                 {
                     deviceComboBoxItem.Board = Board.Roxy;
                     deviceComboBoxItem.IsBootLoader = true;
                     deviceComboBoxItem.Name = "Roxy";
-                    //StatusWrite("Roxy bootloader found!");
-                    //SetFlashButtonStatus(isElfLoaded);
-                    //EnableConfigBox(false);
-
-                    //if (waitingForBootloader)
-                    //    flashElfEvent?.Invoke(this, new FlashEventArgs());
                 }
                 else if (device.VendorID == 0x1CCF && device.ProductID == 0x8048)
                 {
