@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Roxy.Lib
 {
@@ -27,6 +27,16 @@ namespace Roxy.Lib
             {-126, 16 },
             {-125, 17 }
         };
+
+        public static sbyte ComboToByte(int index)
+        {
+            return ComboBoxDict.Where(x => x.Value == index).FirstOrDefault().Key;
+        }
+
+        public static int ByteToCombo(sbyte sens)
+        {
+            return ComboBoxDict.Where(x => x.Key == sens).FirstOrDefault().Value;
+        }
 
         public static readonly List<string> QeDropdownStrings = new List<string>()
         {

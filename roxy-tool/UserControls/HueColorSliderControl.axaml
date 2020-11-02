@@ -1,0 +1,43 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="roxy_tool.UserControls.HueColorSliderControl">
+  <Grid ColumnDefinitions="*,Auto"
+        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto"
+        Margin="5 5 5 5"
+        Height="300">
+      <TextBlock Grid.Row="0"
+                 Text="Approximate Color"
+                 Margin="0 0 0 5"/>
+      <Border Grid.Row="1"
+              BorderBrush="Gray" BorderThickness="1">
+        <Button x:Name="colorButton" Height="30" />
+      </Border>
+      <TextBlock Grid.Row="2"
+                 Text="Current Value"
+                 DockPanel.Dock="Top"
+                 Margin="0 20 0 5"/>
+      <NumericUpDown x:Name="colorValueNumeric"
+                     Grid.Row="3"
+                     Value="{Binding #colorSlider.Value}"
+                     Minimum="0"
+                     Maximum="255"
+                     DockPanel.Dock="Top"
+                     FormatString="F0"
+                     ClipValueToMinMax="True" />
+      <Button x:Name="okButton"
+              Grid.Row="5"
+              Margin="0 0 0 5">OK</Button>
+    <Button x:Name="cancelButton"
+              Grid.Row="6">Cancel</Button>
+    <Slider x:Name="colorSlider"
+            Grid.Column="1"
+            Grid.RowSpan="7"
+            Orientation="Vertical"
+            Minimum="0"
+            Maximum="255"
+            Value="0"
+            Margin="10 0 0 0"/>
+  </Grid>
+</UserControl>

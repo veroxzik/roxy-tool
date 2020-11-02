@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>roxy_tool</RootNamespace>
+    <AssemblyName>roxy-tool</AssemblyName>
+    <ApplicationIcon>VXZK.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Authors>Verox Zik</Authors>
+    <Company>VXZK Designs</Company>
+    <Product>Roxy Tool</Product>
+    <PackageId>Roxy Tool</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.9.12" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.9.12" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.12" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.12" />
+    <PackageReference Include="ELFSharp" Version="2.11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="HidSharp">
+      <HintPath>..\lib\HIDSharp\netcoreapp2.0\HidSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UserControls\buttonLedControl.axaml.cs">
+      <DependentUpon>ButtonLedControl.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Roxy.Lib\Roxy.Lib.csproj" />
+  </ItemGroup>
+</Project>

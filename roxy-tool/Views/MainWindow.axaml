@@ -1,0 +1,138 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		x:Class="roxy_tool.Views.MainWindow"
+		xmlns:rx="clr-namespace:roxy_tool.UserControls"
+		Icon="/Assets/VXZK.ico"
+		Width="550" Height="800"
+		MinWidth="550" MinHeight="640"
+		Title="Roxy Tool">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height = "5" />
+			<RowDefinition Height = "Auto" />
+			<RowDefinition Height = "5" />
+			<RowDefinition Height = "Auto" />
+			<RowDefinition Height = "5" />
+			<RowDefinition Height = "*" />
+			<RowDefinition Height = "5" />
+		</Grid.RowDefinitions>
+		<Menu Grid.Row="1">
+			<MenuItem x:Name="scanMenuItem" Header="Scan for Devices" />			
+			<MenuItem Header="About">
+				<MenuItem x:Name="licensesMenuItem" Header="Licenses" />
+			</MenuItem>
+      
+		</Menu>
+		<DataGrid x:Name="boardGrid"
+              Grid.Row="3"
+				  Height="80"
+				  Items="{Binding ConnectedDevices}"
+				  IsReadOnly="True"
+				  CanUserReorderColumns="False"
+				  SelectionMode="Single">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Board Name"
+									Binding="{Binding BoardName}"
+									Width="2*" />
+				<DataGridTextColumn Header="Board Type"
+									Binding="{Binding BoardType}"
+									Width="*" />
+				<DataGridTextColumn Header="Serial Number"
+									Binding="{Binding SerialNumber}"
+									Width="*" />
+			</DataGrid.Columns>
+		</DataGrid>
+		<Grid Grid.Row="5" RowDefinitions="*">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width = "*" />
+				<ColumnDefinition Width = "200" />
+			</Grid.ColumnDefinitions>
+			<TabControl x:Name="tabControl"
+						Grid.Column="0"
+						Margin="5,0,5,0">
+				<TabItem Header="Config">
+          <Grid x:Name="configTab"
+                ColumnDefinitions="*"
+                IsEnabled="False">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid RowDefinitions="Auto"
+                  Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <Button x:Name="readConfigButton"
+									Grid.Column="0"
+									Margin="0 0 5 0">Read Config</Button>
+              <Button x:Name="writeConfigButton"
+									Grid.Column="1"
+									Margin="5 0 0 0">Write Config</Button>
+            </Grid>
+            <ScrollViewer x:Name="scrollViewer"
+                          Grid.Row="1"
+                               VerticalScrollBarVisibility="Visible">
+              <rx:ConfigPanel x:Name="configPanel" />
+            </ScrollViewer>
+
+          </Grid>
+				</TabItem>
+				<TabItem Header="Flash">
+					<StackPanel Orientation="Vertical" Spacing="5">
+						<Button x:Name="loadElfButton">Load ELF</Button>
+						<TextBlock>Selected File:</TextBlock>
+						<Border BorderBrush="Black"
+								BorderThickness="1">
+							<TextBlock x:Name="elfFilenameText"
+									   MinHeight="20"
+									   Margin="5,2,5,0"
+									   TextWrapping="Wrap">Select a file</TextBlock>
+						</Border>
+						<Button x:Name="flashElfButton"
+								IsEnabled="False">Flash to Chip</Button>
+					</StackPanel>
+				</TabItem>
+			</TabControl>
+			<Border x:Name="consoleContainer"
+					Grid.Column="1"
+					BorderBrush="Gray"
+					BorderThickness="1"
+					Margin="5,0,5,0">
+        <ScrollViewer Name="consoleScroll"
+          VerticalScrollBarVisibility="Visible">
+				<TextBlock x:Name="consoleText"
+						   TextWrapping="Wrap"
+                   MaxWidth="160"
+						   Margin="5 5 5 5"/>
+        </ScrollViewer>
+			</Border>
+			<Border x:Name="keyMappingContainer"
+					Grid.Column="2"
+					BorderBrush="Gray"
+					BorderThickness="1"
+					Margin="5,0,5,0"
+					IsVisible="False">
+				<rx:KeyMappingControl x:Name="keyMappingControl" />
+			</Border>
+			<Border x:Name="buttonLedContainer"
+					Grid.Column="2"
+					BorderBrush="Gray"
+					BorderThickness="1"
+					Margin="5,0,5,0"
+					IsVisible="False">
+				<rx:ButtonLedControl x:Name="buttonLedControl" />
+			</Border>
+			<Border x:Name="rgbContainer"
+					Grid.Column="2"
+					BorderBrush="Gray"
+					BorderThickness="1"
+					Margin="5 0 5 0"
+					IsVisible="False">
+				<rx:HueColorSliderControl x:Name="rgbControl" />
+			</Border>
+
+		</Grid>
+	</Grid>
+</Window>

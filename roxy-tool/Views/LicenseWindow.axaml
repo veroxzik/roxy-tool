@@ -1,0 +1,35 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Class="roxy_tool.Views.LicenseWindow"
+        Title="Licenses"
+        Icon="/Assets/VXZK.ico"
+        SizeToContent="WidthAndHeight"
+        CanResize="False">
+  <TextBlock Margin="5 5 5 5">
+Roxy Configuration and Flash Tool
+Copyright (c) 2020, Verox Zik
+
+arcin firmware, original configuration tool
+Copyright (c) 2013, Vegard Storheil Eriksen
+All rights reserved.
+
+ELFSharp
+Copyright (c) 2011 Konrad Kruczyński and other contributors
+[https://github.com/konrad-kruczynski/elfsharp]
+
+HIDSharp
+Copyright 2010-2019 James F. Bellinger
+[http://www.zer7.com/software/hidsharp]
+
+Avalonia
+Copyright (c) .NET Foundation and Contributors All Rights Reserved
+[https://github.com/AvaloniaUI/Avalonia]
+
+Special Thanks:
+theKeithD's python bootloader script
+[https://github.com/theKeithD/arcin]
+  </TextBlock>
+
+</Window>

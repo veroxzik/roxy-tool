@@ -1,0 +1,61 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="roxy_tool.UserControls.ConfigOption"
+             MinHeight="26">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="120" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+  <!--<StackPanel Orientation="Horizontal"
+               Spacing="5">-->
+    <TextBlock x:Name="labelText"
+               MinWidth="120"
+               Margin="5 5 0 0"
+               TextWrapping="Wrap"
+               Text="{Binding LabelText}"/>
+    <Grid x:Name="inputGrid"
+          MinWidth="50"
+          Grid.Column="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBox x:Name="inputText"
+               Grid.ColumnSpan="2"
+               HorizontalAlignment="Stretch"
+               Height="26"
+               IsVisible="False"/>
+      <NumericUpDown x:Name="inputNumeric"
+                     HorizontalAlignment="Stretch"
+                     Height="32"
+                     ShowButtonSpinner="False"
+                     IsVisible="False"/>
+      <TextBlock x:Name="unitsText"
+                 Grid.Column="1"
+                 Height="26"
+                 Margin="5 5 5 0"
+                 IsVisible="False"/>
+      <ComboBox x:Name="inputCombo"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Stretch"
+                Height="26"
+                IsVisible="False"/>
+      <Button x:Name="input1Button"
+              Height="26"
+              IsVisible="False"/>
+      <Button x:Name="input2Button"
+              Grid.Column="2"
+              Height="26"
+              IsVisible="False"/>
+      <StackPanel x:Name="checkBoxPanel"
+                  Orientation="Vertical"
+                  Spacing="5"
+                  IsVisible="False">
+      </StackPanel>
+    </Grid>
+  <!--</StackPanel>-->
+  </Grid>
+</UserControl>

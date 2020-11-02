@@ -1,36 +1,119 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Roxy.Lib
 {
-    public class Configuration
+    public abstract class Configuration
     {
-        public string Label { get; private set; }
-        public uint Flags { get; private set; }
-        public sbyte QE1Sens { get; private set; }
-        public sbyte QE2Sens { get; private set; }
-        public byte PS2Mode { get; private set; }
-        public byte RgbInterface { get; private set; }
-        public byte Brightness { get; private set; }
-        public byte ButtonDebounce { get; private set; }
-        public byte AscEmulation { get; private set; }
-        public byte AxisDebounce { get; private set; }
-        public byte ControllerOutput { get; private set; }
+        public abstract byte[] GetBytes();
+    }
 
-        public Configuration(byte[] bytes)
+    public class StandardConfiguration : Configuration
+    {
+        public string Label { get; set; }
+        public uint Flags { get; set; }
+        public sbyte QE1Sens { get; set; }
+        public sbyte QE2Sens { get; set; }
+        public byte PS2Mode { get; set; }
+        public byte RgbInterface { get; set; }
+        public byte RgbBrightness { get; set; }
+        public byte ButtonDebounce { get; set; }
+        public byte AscEmulation { get; set; }
+        public byte AxisDebounce { get; set; }
+        public byte ControllerOutput { get; set; }
+
+        public StandardConfiguration(byte[] bytes)
         {
-            Label = Encoding.ASCII.GetString(bytes, 4, 12);
+            Label = Encoding.ASCII.GetString(bytes, 4, 12).Replace("\0", string.Empty);
             Flags = BitConverter.ToUInt32(bytes, 16);
             QE1Sens = (sbyte)bytes[20];
             QE2Sens = (sbyte)bytes[21];
             PS2Mode = bytes[22];
             RgbInterface = bytes[23];
-            Brightness = bytes[24];
+            RgbBrightness = bytes[24];
             ButtonDebounce = bytes[25];
             AscEmulation = bytes[26];
             AxisDebounce = bytes[27];
             ControllerOutput = bytes[28];
+        }
+        public override byte[] GetBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x00;  // Segment must be 0
+            configBytes[2] = 0x19;  // Roxy is 25 bytes
+            configBytes[3] = 0x00;  // Padding byte
+            byte[] label = Encoding.ASCII.GetBytes(Label);
+            Array.Resize(ref label, 12);
+            Array.Copy(label, 0, configBytes, 4, 12);
+            Array.Copy(BitConverter.GetBytes(Flags), 0, configBytes, 16, 4);
+            configBytes[20] = (byte)QE1Sens;
+            configBytes[21] = (byte)QE2Sens;
+            configBytes[22] = PS2Mode;
+            configBytes[23] = RgbInterface;
+            configBytes[24] = RgbBrightness;
+            configBytes[25] = ButtonDebounce;
+            configBytes[26] = AscEmulation;
+            configBytes[27] = AxisDebounce;
+            configBytes[28] = ControllerOutput;
+
+            return configBytes;
+        }
+    }
+
+    public class RgbConfiguration : Configuration
+    {
+        public byte Mode { get; set; }
+        public byte Led1Hue { get; set; }
+        public byte Led2Hue { get; set; }
+
+        public RgbConfiguration(byte[] bytes)
+        {
+            Mode = bytes[4];
+            Led1Hue = bytes[5];
+            Led2Hue = bytes[6];
+        }
+        public override byte[] GetBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x01;  // RGB config is Segment 1
+            configBytes[2] = 0x03;  // Length
+            configBytes[3] = 0x00;  // Padding byte
+            configBytes[4] = Mode;
+            configBytes[5] = Led1Hue;
+            configBytes[6] = Led2Hue;
+
+            return configBytes;
+        }
+    }
+
+    public class KeyMappingConfiguration : Configuration
+    {
+        public byte[] KeyMapping { get; private set; }
+        public byte[] JoystickMapping { get; private set; }
+        public byte[] LedMode { get; private set; }
+
+        public KeyMappingConfiguration(byte[] bytes)
+        {
+            KeyMapping = bytes.Skip(4).Take(16).ToArray();
+            JoystickMapping = bytes.Skip(20).Take(6).ToArray();
+            LedMode = bytes.Skip(26).Take(8).ToArray();
+        }
+
+        public override byte[] GetBytes()
+        {
+            byte[] configBytes = new byte[64];
+            configBytes[0] = 0xc0;  // Report ID
+            configBytes[1] = 0x02;  // Key mapping config is Segment 2
+            configBytes[2] = 0x1E;  // Length
+            configBytes[3] = 0x00;  // Padding byte
+            Array.Copy(KeyMapping, 0, configBytes, 4, 16);
+            // 6 bytes of joystick remap (one nibble per button)
+            Array.Copy(LedMode, 0, configBytes, 26, 8);
+
+            return configBytes;
         }
     }
 }

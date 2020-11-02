@@ -1,14 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Roxy.Lib
 {
-    public enum Board
+    [Flags]
+    public enum BoardType
+    {
+        Roxy = 0x01,
+        arcinRoxy = 0x02,
+        arcin = 0x04
+    }
+
+    public enum SpoofType
     {
         None,
-        arcin,
-        Roxy,
-        arcinRoxy
+        IIDX,
+        SDVX
     }
 }
