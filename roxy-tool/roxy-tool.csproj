@@ -30,6 +30,9 @@
     <Compile Update="UserControls\buttonLedControl.axaml.cs">
       <DependentUpon>ButtonLedControl.axaml</DependentUpon>
     </Compile>
+    <Compile Update="UserControls\JoystickMappingControl.axaml.cs">
+      <DependentUpon>JoystickMappingControl.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Roxy.Lib\Roxy.Lib.csproj" />

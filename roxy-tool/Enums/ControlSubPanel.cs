@@ -9,6 +9,8 @@ namespace roxy_tool.Enums
         RGB1,
         RGB2,
         KeyMapping,
-        ButtonLedMode
+        ButtonLedMode,
+        DeviceControl,
+        JoystickMapping
     }
 }

@@ -28,5 +28,7 @@
         public static readonly string ControllerOutput = "controllerCombo";
         public static readonly string KeyboardMapping = "keyMapping";
         public static readonly string ButtonLedMode = "buttonLedMode";
+        public static readonly string DeviceControl = "deviceControl";
+        public static readonly string JoystickMapping = "joystickMapping";
     }
 }

@@ -110,10 +110,30 @@ namespace Roxy.Lib
             configBytes[2] = 0x1E;  // Length
             configBytes[3] = 0x00;  // Padding byte
             Array.Copy(KeyMapping, 0, configBytes, 4, 16);
-            // 6 bytes of joystick remap (one nibble per button)
+            Array.Copy(JoystickMapping, 0, configBytes, 20, 6);
             Array.Copy(LedMode, 0, configBytes, 26, 8);
 
             return configBytes;
+        }
+    }
+
+    public class DeviceConfiguration : Configuration
+    {
+        public uint EnableFlags { get; private set; }
+        public byte Svre9Buttons { get; private set; }
+        public byte[] Data { get; private set; }
+
+        public DeviceConfiguration(byte[] bytes)
+        {
+            EnableFlags = BitConverter.ToUInt32(bytes, 4);
+            Svre9Buttons = bytes[9];
+            Data = new byte[bytes.Length - 4];
+            Array.Copy(bytes, 4, Data, 0, 5);
+        }
+
+        public override byte[] GetBytes()
+        {
+            throw new NotImplementedException();
         }
     }
 }

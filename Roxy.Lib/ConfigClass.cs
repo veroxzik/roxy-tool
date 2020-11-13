@@ -138,12 +138,29 @@ namespace Roxy.Lib
             new KeyEntry("Windows",  243 )
         };
 
-        public static readonly List<String> ButtonLightModes = new List<string>()
+        public static readonly List<string> ButtonLightModes = new List<string>()
         {
             "Standard",
             "Standard (Invert)",
             "Fade Out",
             "Fade Out (Invert)"
+        };
+
+        public static readonly List<string> ButtonList = new List<string>()
+        {
+            "Disabled",
+            "Button 1",
+            "Button 2",
+            "Button 3",
+            "Button 4",
+            "Button 5",
+            "Button 6",
+            "Button 7",
+            "Button 8",
+            "Button 9",
+            "Button 10",
+            "Button 11",
+            "Button 12"
         };
     }
 

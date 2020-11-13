@@ -68,5 +68,13 @@
                      LabelText="Button LED Mode"
                      ButtonText="Button LED Mode"
                      ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="deviceControl"
+                     LabelText="Device Config"
+                     ButtonText="Select Options"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="joystickMapping"
+                     LabelText="Joystick Mapping"
+                     ButtonText="Joystick Mapping"
+                     ConfigSettings="rx"/>
   </StackPanel>
 </UserControl>

@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="roxy_tool.UserControls.DeviceControl"
+             xmlns:rx="clr-namespace:roxy_tool.UserControls">
+  <StackPanel x:Name="optionsPanel"
+                Spacing="5"
+                Margin="5 5 5 5">
+    <rx:ConfigOption x:Name="flagsCheck"
+                     LabelText="Enabled Devices:"
+                     CheckOptions="Enable SVRE9 LEDs"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="svre9Left"
+                     LabelText="SVRE9 LED Port (Left)"
+                     ComboOptions="Button 1|Button 2|Button 3|Button 4|Button 5|Button 6|Button 7|Button 8|Button 9|Button 10|Button 11|Button 12"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="svre9Right"
+                     LabelText="SVRE9 LED Port (Right)"
+                     ComboOptions="Button 1|Button 2|Button 3|Button 4|Button 5|Button 6|Button 7|Button 8|Button 9|Button 10|Button 11|Button 12"
+                     ConfigSettings="rx"/>
+    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*">
+      <Button x:Name="okButton" Margin="0 0 5 0">OK</Button>
+      <Button x:Name="cancelButton" Margin="5 0 0 0" Grid.Column="1">Cancel</Button>
+    </Grid>
+  </StackPanel>
+</UserControl>

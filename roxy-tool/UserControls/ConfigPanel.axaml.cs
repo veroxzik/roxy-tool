@@ -40,36 +40,18 @@ namespace roxy_tool.UserControls
                     options.Add(name, control);
             }
 
-            options[OptionStrings.RgbConfig].Click += rgb1_Click;
-            options[OptionStrings.RgbConfig].Click2 += rgb2_Click;
-            options[OptionStrings.KeyboardMapping].Click += keyMapping_Click;
-            options[OptionStrings.ButtonLedMode].Click += buttonLed_Click;
+            options[OptionStrings.RgbConfig].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.RGB1, options[OptionStrings.RgbConfig].GetHue(0)); });
+            options[OptionStrings.RgbConfig].Click2 += ((s, e) => { InvokeSubPanel(ControlSubPanel.RGB2, options[OptionStrings.RgbConfig].GetHue(1)); });
+            options[OptionStrings.KeyboardMapping].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.KeyMapping); });
+            options[OptionStrings.ButtonLedMode].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.ButtonLedMode); });
+            options[OptionStrings.DeviceControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.DeviceControl); });
+            options[OptionStrings.JoystickMapping].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.JoystickMapping); });
         }
 
-        private void rgb1_Click(object sender, EventArgs e)
+        private void InvokeSubPanel(ControlSubPanel panel, byte value = 0)
         {
             SubPanelChanged?.Invoke(
-                this, new ConfigPanelEventArgs(
-                    ControlSubPanel.RGB1, options[OptionStrings.RgbConfig].GetHue(0)));
-        }
-
-        private void rgb2_Click(object sender, EventArgs e)
-        {
-            SubPanelChanged?.Invoke(
-                this, new ConfigPanelEventArgs(
-                    ControlSubPanel.RGB2, options[OptionStrings.RgbConfig].GetHue(1)));
-        }
-
-        private void keyMapping_Click(object sender, EventArgs e)
-        {
-            SubPanelChanged?.Invoke(
-                this, new ConfigPanelEventArgs(ControlSubPanel.KeyMapping));
-        }
-
-        private void buttonLed_Click(object sender, EventArgs e)
-        {
-            SubPanelChanged?.Invoke(
-                this, new ConfigPanelEventArgs(ControlSubPanel.ButtonLedMode));
+                this, new ConfigPanelEventArgs(panel, value));
         }
 
         public void SetBoard(BoardType board)

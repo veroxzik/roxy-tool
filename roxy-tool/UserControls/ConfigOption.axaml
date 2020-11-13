@@ -9,8 +9,6 @@
       <ColumnDefinition Width="120" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-  <!--<StackPanel Orientation="Horizontal"
-               Spacing="5">-->
     <TextBlock x:Name="labelText"
                MinWidth="120"
                Margin="5 5 0 0"
@@ -56,6 +54,5 @@
                   IsVisible="False">
       </StackPanel>
     </Grid>
-  <!--</StackPanel>-->
   </Grid>
 </UserControl>

@@ -58,7 +58,8 @@
               <RowDefinition Height="Auto" />
               <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid RowDefinitions="Auto"
+            <Grid x:Name="configButtons"
+                  RowDefinitions="Auto"
                   Grid.Row="0">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -71,14 +72,56 @@
 									Grid.Column="1"
 									Margin="5 0 0 0">Write Config</Button>
             </Grid>
-            <ScrollViewer x:Name="scrollViewer"
+            <ScrollViewer x:Name="configScrollViewer"
                           Grid.Row="1"
-                               VerticalScrollBarVisibility="Visible">
+                          VerticalScrollBarVisibility="Visible">
               <rx:ConfigPanel x:Name="configPanel" />
             </ScrollViewer>
-
+            <ScrollViewer x:Name="keyMappingScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:KeyMappingControl x:Name="keyMappingControl" />
+            </ScrollViewer>
+            <ScrollViewer x:Name="buttonLedScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:ButtonLedControl x:Name="buttonLedControl" />
+            </ScrollViewer>
+            <ScrollViewer x:Name="rgbScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:HueColorSliderControl x:Name="rgbControl" />
+            </ScrollViewer>
+            <ScrollViewer x:Name="deviceScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:DeviceControl x:Name="deviceControl" />
+            </ScrollViewer>
+            <ScrollViewer x:Name="joystickMappingScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:JoystickMappingControl x:Name="joystickMappingControl" />
+            </ScrollViewer>
           </Grid>
 				</TabItem>
+        <TabItem Header="Devices">
+          <StackPanel Orientation="Vertical"
+                      Spacing="5">
+            <Grid RowDefinitions="Auto" ColumnDefinitions="*,*">
+            <Button x:Name="svre9Left"
+                    Grid.Column="0"
+                    Margin="0 0 5 0">SVRE9 Left LED Toggle</Button>
+            <Button x:Name="svre9Right"
+                    Grid.Column="1"
+                    Margin="5 0 0 0">SVRE9 Right LED Toggle</Button>
+            </Grid>
+          </StackPanel>
+        </TabItem>
 				<TabItem Header="Flash">
 					<StackPanel Orientation="Vertical" Spacing="5">
 						<Button x:Name="loadElfButton">Load ELF</Button>
@@ -108,31 +151,6 @@
 						   Margin="5 5 5 5"/>
         </ScrollViewer>
 			</Border>
-			<Border x:Name="keyMappingContainer"
-					Grid.Column="2"
-					BorderBrush="Gray"
-					BorderThickness="1"
-					Margin="5,0,5,0"
-					IsVisible="False">
-				<rx:KeyMappingControl x:Name="keyMappingControl" />
-			</Border>
-			<Border x:Name="buttonLedContainer"
-					Grid.Column="2"
-					BorderBrush="Gray"
-					BorderThickness="1"
-					Margin="5,0,5,0"
-					IsVisible="False">
-				<rx:ButtonLedControl x:Name="buttonLedControl" />
-			</Border>
-			<Border x:Name="rgbContainer"
-					Grid.Column="2"
-					BorderBrush="Gray"
-					BorderThickness="1"
-					Margin="5 0 5 0"
-					IsVisible="False">
-				<rx:HueColorSliderControl x:Name="rgbControl" />
-			</Border>
-
 		</Grid>
 	</Grid>
 </Window>

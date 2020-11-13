@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Roxy.Lib;
+using System.Security.Cryptography;
 
 namespace roxy_tool.Views
 {
@@ -40,18 +41,26 @@ namespace roxy_tool.Views
 
         Grid configTab;
 
+        Grid configButtons;
         Button readConfigButton;
         Button writeConfigButton;
 
         ConfigPanel configPanel;
+
         KeyMappingControl keyMappingControl;
-        Border keyMappingContainer;
+        ScrollViewer keyMappingScrollViewer;
 
         ButtonLedControl buttonLedControl;
-        Border buttonLedContainer;
+        ScrollViewer buttonLedScrollViewer;
 
         HueColorSliderControl rgbControl;
-        Border rgbContainer;
+        ScrollViewer rgbScrollViewer;
+
+        DeviceControl deviceControl;
+        ScrollViewer deviceScrollViewer;
+
+        JoystickMappingControl joystickMappingControl;
+        ScrollViewer joystickMappingScrollViewer;
 
         // Flashing
         string elfFilePath;
@@ -113,6 +122,7 @@ namespace roxy_tool.Views
 
             this.configTab = this.FindControl<Grid>("configTab");
 
+            this.configButtons = this.FindControl<Grid>("configButtons");
             this.readConfigButton = this.FindControl<Button>("readConfigButton");
             readConfigButton.Click += ReadConfigButton_Click;
             this.writeConfigButton = this.FindControl<Button>("writeConfigButton");
@@ -123,15 +133,34 @@ namespace roxy_tool.Views
 
             this.rgbControl = this.FindControl<HueColorSliderControl>("rgbControl");
             rgbControl.OnClosed += rgbControl_Closed;
-            this.rgbContainer = this.FindControl<Border>("rgbContainer");
+            this.rgbScrollViewer = this.FindControl<ScrollViewer>("rgbScrollViewer");
 
             this.keyMappingControl = this.FindControl<KeyMappingControl>("keyMappingControl");
-            this.keyMappingContainer = this.FindControl<Border>("keyMappingContainer");
             keyMappingControl.OnClosed += configControl_Closed;
+            this.keyMappingScrollViewer = this.FindControl<ScrollViewer>("keyMappingScrollViewer");
 
             this.buttonLedControl = this.FindControl<ButtonLedControl>("buttonLedControl");
             buttonLedControl.OnClosed += configControl_Closed;
-            this.buttonLedContainer = this.FindControl<Border>("buttonLedContainer");           
+            this.buttonLedScrollViewer = this.FindControl<ScrollViewer>("buttonLedScrollViewer");
+
+            this.deviceControl = this.FindControl<DeviceControl>("deviceControl");
+            deviceControl.OnClosed += configControl_Closed;
+            this.deviceScrollViewer = this.FindControl<ScrollViewer>("deviceScrollViewer");
+
+            this.joystickMappingControl = this.FindControl<JoystickMappingControl>("joystickMappingControl");
+            joystickMappingControl.OnClosed += configControl_Closed;
+            this.joystickMappingScrollViewer = this.FindControl<ScrollViewer>("joystickMappingScrollViewer");
+
+            var svre9left = this.FindControl<Button>("svre9Left");
+            svre9left.Click += ((s, e) =>
+            {
+                SendCommand(1, 0);
+            });
+            var svre9right = this.FindControl<Button>("svre9Right");
+            svre9right.Click += ((s, e) =>
+            {
+                SendCommand(1, 1);
+            });
 
             flashElfEvent += flashElf;
 
@@ -256,6 +285,7 @@ namespace roxy_tool.Views
                 var files = await this.OpenFileBrowser();
                 if (files.Count() != 0)
                 {
+                    elfData = new byte[0];
                     elfFilePath = files.First();
                     elfFilenameText.Text = elfFilePath;
 
@@ -280,7 +310,7 @@ namespace roxy_tool.Views
 
                         StatusWrite("ELF file loaded!");
                         isElfLoaded = true;
-                        SetFlashButtonStatus(isElfLoaded && (ConnectedDevices.Count > 0));
+                        SetFlashButtonStatus(isElfLoaded && (SelectedDevice != null));
                     }
                 }
             }
@@ -393,7 +423,7 @@ namespace roxy_tool.Views
 
             var board = (RoxyDevice)boardGrid.SelectedItem;
             SetBoard(board.BoardType);
-            if(board.IsBootloader)
+            if (board.IsBootloader)
             {
                 configTab.IsEnabled = false;
             }
@@ -402,6 +432,7 @@ namespace roxy_tool.Views
                 configTab.IsEnabled = true;
                 UpdateControls();
             }
+            SetFlashButtonStatus(isElfLoaded);
         }
 
         private void ReadConfigButton_Click(object sender, RoutedEventArgs e)
@@ -428,8 +459,14 @@ namespace roxy_tool.Views
                     case BoardType.Roxy:
                     case BoardType.arcinRoxy:
                         configPanel.SetMapping(dev.StdConfig, dev.RgbConfig);
-                        keyMappingControl.SetMapping(dev.KeyConfig.KeyMapping);
-                        buttonLedControl.SetMapping(dev.KeyConfig.LedMode);
+                        if (dev.KeyConfig != null)
+                        {
+                            keyMappingControl.SetMapping(dev.KeyConfig.KeyMapping);
+                            buttonLedControl.SetMapping(dev.KeyConfig.LedMode);
+                            joystickMappingControl.SetMapping(dev.KeyConfig.JoystickMapping);
+                        }
+                        if (dev.DeviceConfig != null)
+                            deviceControl.SetMapping(dev.DeviceConfig.Data);
                         break;
                     case BoardType.arcin:
                         configPanel.SetMapping(dev.StdConfig, dev.RgbConfig);
@@ -473,15 +510,26 @@ namespace roxy_tool.Views
                     // Get mapping bytes
                     var keyMapping = keyMappingControl.GetMapping();
                     var ledMapping = buttonLedControl.GetMapping();
+                    var joyMapping = joystickMappingControl.GetMapping();
                     byte[] mappingBytes = new byte[64];
                     mappingBytes[0] = 0xc0; // Report ID
                     mappingBytes[1] = 0x02; // Key mapping config is Segment 2
                     mappingBytes[2] = (byte)(keyMapping.Length + 6 + ledMapping.Length); // Length
                     mappingBytes[3] = 0x00; // Padding 
                     Array.Copy(keyMapping, 0, mappingBytes, 4, keyMapping.Length);
-                    // 6 bytes of joystick remapping (one nibble per button)
+                    Array.Copy(joyMapping, 0, mappingBytes, 20, joyMapping.Length);
                     Array.Copy(ledMapping, 0, mappingBytes, 26, ledMapping.Length);
                     configBytes.Add(mappingBytes);
+
+                    // Get device bytes
+                    var devMapping = deviceControl.GetMapping();
+                    byte[] devBytes = new byte[64];
+                    devBytes[0] = 0xc0; // Report ID
+                    devBytes[1] = 0x03; // Device mapping is Segement 3
+                    devBytes[2] = (byte)devMapping.Length;  // Length
+                    devBytes[3] = 0x00; // Padding
+                    Array.Copy(devMapping, 0, devBytes, 4, devMapping.Length);
+                    configBytes.Add(devBytes);
                 }
 
                 StatusWrite("Writing config...");
@@ -510,7 +558,38 @@ namespace roxy_tool.Views
                 {
                     StatusWrite("Failed to open the device. Unplug and reconnect.");
                 }
+            }
+        }
 
+        private void SendCommand(uint commandID, uint data)
+        {
+            var dev = SelectedDevice;
+            if (dev != null && dev.IsConfigLoaded)
+            {
+                var bytes = new byte[7];
+                bytes[0] = 0xd0;    // Report ID
+                Array.Copy(BitConverter.GetBytes((UInt16)commandID), 0, bytes, 1, 2);
+                Array.Copy(BitConverter.GetBytes(data), 0, bytes, 3, 4);
+
+                HidStream hidStream;
+                if (dev.Device.TryOpen(out hidStream))
+                {
+                    using (hidStream)
+                    {
+                        try
+                        {
+                            hidStream.SetFeature(bytes);
+                        }
+                        catch (Exception ex)
+                        {
+                            StatusWrite($"Error sending command:\n {ex.Message}");
+                        }
+                    }
+                }
+                else
+                {
+                    StatusWrite("Failed to open the device. Unplug and reconnect.");
+                }
             }
         }
 
@@ -518,28 +597,33 @@ namespace roxy_tool.Views
         {
             Dispatcher.UIThread.InvokeAsync(new Action(() =>
             {
-                tabControl.IsEnabled = false;
-                consoleContainer.IsVisible = false;
+                configButtons.IsEnabled = false;
+                configPanel.IsVisible = false;
                 switch (e.SubPanel)
                 {
                     case ControlSubPanel.RGB1:
                         rgbControl.SetHue(0, e.Value);
-                        rgbContainer.IsVisible = true;
+                        rgbScrollViewer.IsVisible = true;
                         break;
                     case ControlSubPanel.RGB2:
                         rgbControl.SetHue(1, e.Value);
-                        rgbContainer.IsVisible = true;
+                        rgbScrollViewer.IsVisible = true;
                         break;
                     case ControlSubPanel.KeyMapping:
-                        keyMappingContainer.IsVisible = true;
+                        keyMappingScrollViewer.IsVisible = true;
                         break;
                     case ControlSubPanel.ButtonLedMode:
-                        buttonLedContainer.IsVisible = true;
+                        buttonLedScrollViewer.IsVisible = true;
+                        break;
+                    case ControlSubPanel.DeviceControl:
+                        deviceScrollViewer.IsVisible = true;
+                        break;
+                    case ControlSubPanel.JoystickMapping:
+                        joystickMappingScrollViewer.IsVisible = true;
                         break;
                     default:
                         break;
                 }
-
             }));
         }
 
@@ -547,29 +631,9 @@ namespace roxy_tool.Views
         {
             Dispatcher.UIThread.InvokeAsync(new Action(() =>
             {
-                tabControl.IsEnabled = true;
-                consoleContainer.IsVisible = true;
+                configButtons.IsEnabled = true;
+                configPanel.IsVisible = true;
                 configPanel.SetColor(e.Index, e.Value);
-            }));
-        }
-
-        private void keyMapping_Click(object sender, EventArgs e)
-        {
-            Dispatcher.UIThread.InvokeAsync(new Action(() =>
-            {
-                tabControl.IsEnabled = false;
-                consoleContainer.IsVisible = false;
-                keyMappingContainer.IsVisible = true;
-            }));
-        }
-
-        private void buttonLed_Click(object sender, EventArgs e)
-        {
-            Dispatcher.UIThread.InvokeAsync(new Action(() =>
-            {
-                tabControl.IsEnabled = false;
-                consoleContainer.IsVisible = false;
-                buttonLedContainer.IsVisible = true;
             }));
         }
 
@@ -577,8 +641,8 @@ namespace roxy_tool.Views
         {
             Dispatcher.UIThread.InvokeAsync(new Action(() =>
             {
-                tabControl.IsEnabled = true;
-                consoleContainer.IsVisible = true;
+                configButtons.IsEnabled = true;
+                configPanel.IsVisible = true;
             }));
         }
 
@@ -587,8 +651,8 @@ namespace roxy_tool.Views
             var dialog = new OpenFileDialog()
             {
                 Title = "Select an ELF file",
-                AllowMultiple = false,
-                Filters = new List<FileDialogFilter>() { new FileDialogFilter() { Name = "ELF Files (*.elf)", Extensions = new List<string>() { "*.elf" } } }
+                AllowMultiple = true,
+                Filters = new List<FileDialogFilter>() { new FileDialogFilter() { Name = "ELF Files (*.elf)", Extensions = new List<string>() { "*" } } }
             };
             return await dialog.ShowAsync(GetWindow());
         }

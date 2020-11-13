@@ -55,6 +55,7 @@ namespace roxy_tool.Classes
         public StandardConfiguration StdConfig { get; private set; }
         public RgbConfiguration RgbConfig { get; private set; }
         public KeyMappingConfiguration KeyConfig { get; private set; }
+        public DeviceConfiguration DeviceConfig { get; private set; }
 
         public static Action<string> StatusWrite { get; set; }
 
@@ -107,6 +108,9 @@ namespace roxy_tool.Classes
                                             break;
                                         case 2:
                                             KeyConfig = new KeyMappingConfiguration(config);
+                                            break;
+                                        case 3:
+                                            DeviceConfig = new DeviceConfiguration(config);
                                             break;
                                     }
                                 }
