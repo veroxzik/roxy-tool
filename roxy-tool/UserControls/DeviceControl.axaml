@@ -10,8 +10,8 @@
                 Margin="5 5 5 5">
     <rx:ConfigOption x:Name="flagsCheck"
                      LabelText="Enabled Devices:"
-                     CheckOptions="Enable SVRE9 LEDs"
-                     ConfigSettings="rx"/>
+                     CheckOptions="Enable SVRE9 LEDs|Use Turbocharger+ LEDs"
+                     ConfigSettings="rx|rx"/>
     <rx:ConfigOption x:Name="svre9Left"
                      LabelText="SVRE9 LED Port (Left)"
                      ComboOptions="Button 1|Button 2|Button 3|Button 4|Button 5|Button 6|Button 7|Button 8|Button 9|Button 10|Button 11|Button 12"
