@@ -30,7 +30,7 @@
                      ConfigSettings="rxa"/>
     <rx:ConfigOption x:Name="rgbInterfaceCombo"
                      LabelText="RGB Interface"
-                     ComboOptions="Disabled|WS2812b|TLC59711"
+                     ComboOptions="Disabled|WS2812b|TLC59711|TLC5973"
                      ConfigSettings="rx"/>
     <rx:ConfigOption x:Name="rgbBrightnessValue"
                      LabelText="RGB Brightness"

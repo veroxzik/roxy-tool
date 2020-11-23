@@ -187,7 +187,7 @@ namespace roxy_tool.Views
             {
                 if (device.VendorID == 7504 && device.ProductID == 24704)
                 {
-                    if (device.GetProductName() != null && device.GetProductName().Contains("Roxy)"))
+                    if (device.GetProductName() != null && device.GetProductName().Contains("Roxy"))
                     {
                         var dev = new RoxyDevice(device, BoardType.arcinRoxy, false);
                         if (devicesFound.FirstOrDefault(x => x.Equals(dev)) == null && dev.IsConfigLoaded)

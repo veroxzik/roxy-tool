@@ -11,6 +11,22 @@ namespace roxy_tool.Classes
         private static int maxConfig = 5;
 
         public BoardType BoardType { get; private set; }
+        public string BoardTypeString
+        {
+            get
+            {
+                switch (BoardType)
+                {
+                    case BoardType.Roxy:
+                        return "Roxy";
+                    case BoardType.arcinRoxy:
+                        return "arcin (Roxy FW)";
+                    case BoardType.arcin:
+                        return "arcin";
+                }
+                return string.Empty;
+            }
+        }
         public HidDevice Device { get; private set; }
         public bool IsBootloader { get; private set; }
         public string SerialNumber { get { return Device?.GetSerialNumber(); } }
