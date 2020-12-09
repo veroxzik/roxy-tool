@@ -30,5 +30,6 @@
         public static readonly string ButtonLedMode = "buttonLedMode";
         public static readonly string DeviceControl = "deviceControl";
         public static readonly string JoystickMapping = "joystickMapping";
+        public static readonly string TurntableControl = "ttControl";
     }
 }

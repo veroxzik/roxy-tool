@@ -48,7 +48,6 @@ namespace roxy_tool.UserControls
 
         private void OkButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            //mapping = GetMapping();
             Dispatcher.UIThread.InvokeAsync(new Action(() =>
             { this.Parent.IsVisible = false; }));
             OnClosed?.Invoke(this, new ByteEventArgs(activeIndex, Convert.ToByte(colorValueNumeric.Value)));
@@ -59,7 +58,7 @@ namespace roxy_tool.UserControls
             //SetMapping(mapping);
             Dispatcher.UIThread.InvokeAsync(new Action(() =>
             { this.Parent.IsVisible = false; }));
-            OnClosed?.Invoke(this, new ByteEventArgs(activeIndex, Convert.ToByte(colorValueNumeric.Value)));
+            OnClosed?.Invoke(this, new ByteEventArgs(-1, 0));   // Index -1 to cancel
         }
 
         public void SetHue(int index, byte c)
@@ -67,8 +66,6 @@ namespace roxy_tool.UserControls
             activeIndex = index;
 
             colorSlider.Value = c;
-            //colorValueNumeric.Value = c;
-
         }
 
         public Color ApproxColor { get { return HueToColor.Convert((byte)colorSlider.Value); } }

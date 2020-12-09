@@ -62,6 +62,9 @@ namespace roxy_tool.Views
         JoystickMappingControl joystickMappingControl;
         ScrollViewer joystickMappingScrollViewer;
 
+        TurntableControl ttControl;
+        ScrollViewer ttScrollViewer;
+
         // Flashing
         string elfFilePath;
         byte[] elfData = new byte[0];
@@ -150,6 +153,10 @@ namespace roxy_tool.Views
             this.joystickMappingControl = this.FindControl<JoystickMappingControl>("joystickMappingControl");
             joystickMappingControl.OnClosed += configControl_Closed;
             this.joystickMappingScrollViewer = this.FindControl<ScrollViewer>("joystickMappingScrollViewer");
+
+            this.ttControl = this.FindControl<TurntableControl>("ttControl");
+            ttControl.OnClosed += configControl_Closed;
+            this.ttScrollViewer = this.Find<ScrollViewer>("ttScrollViewer");
 
             var svre9left = this.FindControl<Button>("svre9Left");
             svre9left.Click += ((s, e) =>
@@ -464,6 +471,7 @@ namespace roxy_tool.Views
                             keyMappingControl.SetMapping(dev.KeyConfig.KeyMapping);
                             buttonLedControl.SetMapping(dev.KeyConfig.LedMode);
                             joystickMappingControl.SetMapping(dev.KeyConfig.JoystickMapping);
+                            ttControl.SetMapping(dev.RgbConfig.TurntableMapping);
                         }
                         if (dev.DeviceConfig != null)
                             deviceControl.SetMapping(dev.DeviceConfig.Data);
@@ -499,12 +507,14 @@ namespace roxy_tool.Views
                 {
                     // Get RGB bytes
                     var rgbMapping = configPanel.GetRgbMapping();
+                    var ttMapping = ttControl.GetMapping();
                     byte[] rgbBytes = new byte[64];
                     rgbBytes[0] = 0xc0; // Report ID
                     rgbBytes[1] = 0x01; // RGB config is Segment 1
-                    rgbBytes[2] = (byte)rgbMapping.Length; // Length
+                    rgbBytes[2] = (byte)(rgbMapping.Length + ttMapping.Length); // Length
                     rgbBytes[3] = 0x00; // Padding
                     Array.Copy(rgbMapping, 0, rgbBytes, 4, rgbMapping.Length);
+                    Array.Copy(ttMapping, 0, rgbBytes, 4 + rgbMapping.Length, ttMapping.Length);
                     configBytes.Add(rgbBytes);
 
                     // Get mapping bytes
@@ -514,7 +524,7 @@ namespace roxy_tool.Views
                     byte[] mappingBytes = new byte[64];
                     mappingBytes[0] = 0xc0; // Report ID
                     mappingBytes[1] = 0x02; // Key mapping config is Segment 2
-                    mappingBytes[2] = (byte)(keyMapping.Length + 6 + ledMapping.Length); // Length
+                    mappingBytes[2] = (byte)(keyMapping.Length + joyMapping.Length + ledMapping.Length); // Length
                     mappingBytes[3] = 0x00; // Padding 
                     Array.Copy(keyMapping, 0, mappingBytes, 4, keyMapping.Length);
                     Array.Copy(joyMapping, 0, mappingBytes, 20, joyMapping.Length);
@@ -621,6 +631,9 @@ namespace roxy_tool.Views
                     case ControlSubPanel.JoystickMapping:
                         joystickMappingScrollViewer.IsVisible = true;
                         break;
+                    case ControlSubPanel.TurntableControl:
+                        ttScrollViewer.IsVisible = true;
+                        break;
                     default:
                         break;
                 }
@@ -633,7 +646,8 @@ namespace roxy_tool.Views
             {
                 configButtons.IsEnabled = true;
                 configPanel.IsVisible = true;
-                configPanel.SetColor(e.Index, e.Value);
+                if(e.Index != -1)
+                    configPanel.SetColor(e.Index, e.Value);
             }));
         }
 

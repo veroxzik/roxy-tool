@@ -68,11 +68,14 @@ namespace Roxy.Lib
         public byte Led1Hue { get; set; }
         public byte Led2Hue { get; set; }
 
+        public byte[] TurntableMapping { get; set; }
+
         public RgbConfiguration(byte[] bytes)
         {
             Mode = bytes[4];
             Led1Hue = bytes[5];
             Led2Hue = bytes[6];
+            TurntableMapping = bytes.Skip(7).Take(7).ToArray();
         }
         public override byte[] GetBytes()
         {

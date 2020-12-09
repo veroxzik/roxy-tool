@@ -46,6 +46,7 @@ namespace roxy_tool.UserControls
             options[OptionStrings.ButtonLedMode].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.ButtonLedMode); });
             options[OptionStrings.DeviceControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.DeviceControl); });
             options[OptionStrings.JoystickMapping].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.JoystickMapping); });
+            options[OptionStrings.TurntableControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.TurntableControl); });
         }
 
         private void InvokeSubPanel(ControlSubPanel panel, byte value = 0)

@@ -42,7 +42,7 @@
                      ConfigSettings="rx"/>
     <rx:ConfigOption x:Name="rgbModeCombo"
                      LabelText="RGB Mode"
-                     ComboOptions="HID Only|RGB1/2 pulse with QE1/2|Turbocharger (TLC59711)"
+                     ComboOptions="HID Only|RGB1/2 pulse with QE1/2|Turbocharger (TLC59711)|Turntable Mode"
                      ConfigSettings="rx"/>
     <rx:ConfigOption x:Name="rgbColorConfig"
                      LabelText="RGB Color"
@@ -75,6 +75,10 @@
     <rx:ConfigOption x:Name="joystickMapping"
                      LabelText="Joystick Mapping"
                      ButtonText="Joystick Mapping"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="ttControl"
+                     LabelText="Turntable Options"
+                     ButtonText="Turntable Options"
                      ConfigSettings="rx"/>
   </StackPanel>
 </UserControl>

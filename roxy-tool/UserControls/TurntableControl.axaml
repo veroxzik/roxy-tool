@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="roxy_tool.UserControls.TurntableControl"
+             xmlns:rx="clr-namespace:roxy_tool.UserControls">
+  <StackPanel x:Name="optionsPanel"
+              Spacing="5"
+              Margin="5 5 5 5">
+    <rx:ConfigOption x:Name="ttMode"
+                     LabelText="Turntable Mode:"
+                     ComboOptions="Solid|Marquee|Trigger|Rainbow"
+                     ConfigSettings="rx|rx|rx|rx"/>
+    <rx:ConfigOption x:Name="ttType"
+                     LabelText="Spin Type:"
+                     ComboOptions="Sync|SingleSpeed|TwoSpeed"
+                     ConfigSettings="rx|rx|rx"/>
+    <rx:ConfigOption x:Name="ttDirection"
+                     LabelText="Spin Direction:"
+                     ComboOptions="None|CW Idle|CCW Idle|Last Dir."
+                     ConfigSettings="rx|rx|rx|rx"/>
+    <rx:ConfigOption x:Name="ttNumLeds"
+                     LabelText="Number of LEDs:"
+                     NumericOptions="0|60|(60 Max)"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="ttAxis"
+                     LabelText="Turntable Axis:"
+                     ComboOptions="X-Axis|Y-Axis"
+                     ConfigSettings="rx|rx"/>
+    <rx:ConfigOption x:Name="ttHue"
+                     LabelText="TT Hue"
+                     NumericOptions="0|255|(255 Max)"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="ttSat"
+                     LabelText="TT Saturation"
+                     NumericOptions="0|255|(255 Max)"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="ttVal"
+                     LabelText="TT Value"
+                     NumericOptions="0|255|(255 Max)"
+                     ConfigSettings="rx"/>
+    
+    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*">
+      <Button x:Name="okButton" Margin="0 0 5 0">OK</Button>
+      <Button x:Name="cancelButton" Margin="5 0 0 0" Grid.Column="1">Cancel</Button>
+    </Grid>
+  </StackPanel>
+</UserControl>

@@ -107,6 +107,12 @@
                           IsVisible="False">
               <rx:JoystickMappingControl x:Name="joystickMappingControl" />
             </ScrollViewer>
+            <ScrollViewer x:Name="ttScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:TurntableControl x:Name="ttControl" />
+            </ScrollViewer>
           </Grid>
 				</TabItem>
         <TabItem Header="Devices">
