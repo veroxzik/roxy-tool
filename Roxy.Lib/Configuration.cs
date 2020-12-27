@@ -22,6 +22,9 @@ namespace Roxy.Lib
         public byte AscEmulation { get; set; }
         public byte AxisDebounce { get; set; }
         public byte ControllerOutput { get; set; }
+        public byte QE1ReductionRatio { get; set; }
+        public byte QE2ReductionRatio { get; set; }
+        public byte AxisSustain { get; set; }
 
         public StandardConfiguration(byte[] bytes)
         {
@@ -36,13 +39,16 @@ namespace Roxy.Lib
             AscEmulation = bytes[26];
             AxisDebounce = bytes[27];
             ControllerOutput = bytes[28];
+            QE1ReductionRatio = bytes[29];
+            QE2ReductionRatio = bytes[30];
+            AxisSustain = bytes[31];
         }
         public override byte[] GetBytes()
         {
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x00;  // Segment must be 0
-            configBytes[2] = 0x19;  // Roxy is 25 bytes
+            configBytes[2] = 0x1C;  // Roxy is 28 bytes
             configBytes[3] = 0x00;  // Padding byte
             byte[] label = Encoding.ASCII.GetBytes(Label);
             Array.Resize(ref label, 12);
@@ -57,6 +63,9 @@ namespace Roxy.Lib
             configBytes[26] = AscEmulation;
             configBytes[27] = AxisDebounce;
             configBytes[28] = ControllerOutput;
+            configBytes[29] = QE1ReductionRatio;
+            configBytes[30] = QE2ReductionRatio;
+            configBytes[31] = AxisSustain;
 
             return configBytes;
         }

@@ -71,7 +71,9 @@ namespace roxy_tool.UserControls
             options[OptionStrings.BoardLabel].SetText(stdConfig.Label);
             options[OptionStrings.FlagsCheck].SetCheck(stdConfig.Flags);
             options[OptionStrings.Qe1Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE1Sens));
+            options[OptionStrings.Qe1ReductionRatio].SetCombo(stdConfig.QE1ReductionRatio);
             options[OptionStrings.Qe2Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE2Sens));
+            options[OptionStrings.Qe2ReductionRatio].SetCombo(stdConfig.QE2ReductionRatio);
             options[OptionStrings.Ps2Mode].SetCombo(stdConfig.PS2Mode);
             options[OptionStrings.RgbInterface].SetCombo(stdConfig.RgbInterface);
             options[OptionStrings.RgbBrightness].SetNumber(stdConfig.RgbBrightness);
@@ -79,6 +81,8 @@ namespace roxy_tool.UserControls
             options[OptionStrings.RgbMode].SetCombo(rgbConfig.Mode);
             options[OptionStrings.RgbConfig].SetButtonColor(0, rgbConfig.Led1Hue);
             options[OptionStrings.RgbConfig].SetButtonColor(1, rgbConfig.Led2Hue);
+            options[OptionStrings.AxisDebounceTime].SetNumber(stdConfig.AxisDebounce);
+            options[OptionStrings.AxisSustainTime].SetNumber(stdConfig.AxisSustain);
             options[OptionStrings.AscEmulation].SetCombo(stdConfig.AscEmulation);
             options[OptionStrings.ControllerOutput].SetCombo(stdConfig.ControllerOutput);
         }
@@ -90,7 +94,7 @@ namespace roxy_tool.UserControls
 
         public byte[] GetStdMapping()
         {
-            byte[] config = new byte[25];
+            byte[] config = new byte[28];
             byte[] label = Encoding.ASCII.GetBytes(options[OptionStrings.BoardLabel].GetText());
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, config, 0, 12);
@@ -105,6 +109,9 @@ namespace roxy_tool.UserControls
             config[22] = (byte)options[OptionStrings.AscEmulation].GetCombo();
             config[23] = (byte)options[OptionStrings.AxisDebounceTime].GetNumber();
             config[24] = (byte)options[OptionStrings.ControllerOutput].GetCombo();
+            config[25] = (byte)options[OptionStrings.Qe1ReductionRatio].GetCombo();
+            config[26] = (byte)options[OptionStrings.Qe2ReductionRatio].GetCombo();
+            config[27] = (byte)options[OptionStrings.AxisSustainTime].GetNumber();
 
             return config;
         }

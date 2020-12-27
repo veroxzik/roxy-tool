@@ -15,6 +15,8 @@
         public static readonly string SplitQe = "splitQe";
         public static readonly string Qe1Sensitivity = "qe1Combo";
         public static readonly string Qe2Sensitivity = "qe2Combo";
+        public static readonly string Qe1ReductionRatio = "qe1ReductionCombo";
+        public static readonly string Qe2ReductionRatio = "qe2ReductionCombo";
         public static readonly string Ps2Mode = "ps2Combo";
         public static readonly string RgbInterface = "rgbInterfaceCombo";
         public static readonly string RgbBrightness = "rgbBrightnessValue";
@@ -25,6 +27,7 @@
         public static readonly string Rgb2Color = "rgb2Color";
         public static readonly string AscEmulation = "ascEmuCombo";
         public static readonly string AxisDebounceTime = "axisDebounceValue";
+        public static readonly string AxisSustainTime = "axisSustainValue";
         public static readonly string ControllerOutput = "controllerCombo";
         public static readonly string KeyboardMapping = "keyMapping";
         public static readonly string ButtonLedMode = "buttonLedMode";
