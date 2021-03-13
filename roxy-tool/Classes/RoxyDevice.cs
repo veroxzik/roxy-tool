@@ -2,6 +2,8 @@
 using Roxy.Lib;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 
 namespace roxy_tool.Classes
 {
@@ -30,6 +32,7 @@ namespace roxy_tool.Classes
         public HidDevice Device { get; private set; }
         public bool IsBootloader { get; private set; }
         public string SerialNumber { get { return Device?.GetSerialNumber(); } }
+        public string FirmwareVersion { get; private set; }
         public string BoardName
         {
             get
@@ -86,6 +89,7 @@ namespace roxy_tool.Classes
             if(!IsBootloader)
             {
                 ReadConfig();
+                GetFirmwareVersion();
             }
         }
 
@@ -108,6 +112,7 @@ namespace roxy_tool.Classes
                             if (config[0] != 0xc0)
                             {
                                 //StatusWrite("Mismatch in config report ID");
+                                attempts++;
                             }
                             else
                             {
@@ -140,6 +145,40 @@ namespace roxy_tool.Classes
                         else
                         {
                             //StatusWrite($"Found {configBytes.Count} config reports.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //StatusWrite("Failed to get config. Please disconnect and reconnect the board.");
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                //StatusWrite("Failed to open device. Please disconnect and reconnect.");
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool GetFirmwareVersion()
+        {
+            FirmwareVersion = "Unknown";
+            HidStream hidStream;
+            if (Device.TryOpen(out hidStream))
+            {
+                using (hidStream)
+                {
+                    try
+                    {
+                        byte[] version = new byte[64];
+                        version[0] = 0xa0;
+                        hidStream.GetFeature(version);
+                        if (version[0] == 0xa0)
+                        {
+                            FirmwareVersion = Encoding.ASCII.GetString(version.Skip(4).ToArray()).Trim('\0');
                         }
                     }
                     catch (Exception ex)
