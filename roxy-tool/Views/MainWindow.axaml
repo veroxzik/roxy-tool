@@ -21,7 +21,6 @@
 			<MenuItem Header="About">
 				<MenuItem x:Name="licensesMenuItem" Header="Licenses" />
 			</MenuItem>
-      
 		</Menu>
 		<DataGrid x:Name="boardGrid"
               Grid.Row="3"
@@ -134,6 +133,7 @@
 				<TabItem Header="Flash">
 					<StackPanel Orientation="Vertical" Spacing="5">
 						<Button x:Name="loadElfButton">Load ELF</Button>
+            <Button x:Name="getLatestButton">Download Latest Firmware</Button>
 						<TextBlock>Selected File:</TextBlock>
 						<Border BorderBrush="Black"
 								BorderThickness="1">

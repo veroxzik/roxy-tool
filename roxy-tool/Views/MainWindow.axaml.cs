@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using DynamicData;
 using ELFSharp.ELF;
 using HidSharp;
+using Roxy.Lib;
 using roxy_tool.Classes;
 using roxy_tool.Enums;
 using roxy_tool.UserControls;
@@ -14,11 +15,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Roxy.Lib;
-using System.Security.Cryptography;
 
 namespace roxy_tool.Views
 {
@@ -33,6 +36,7 @@ namespace roxy_tool.Views
         TabControl tabControl;
 
         Button loadElfButton;
+        Button getLatestButton;
         TextBlock elfFilenameText;
         Button flashElfButton;
 
@@ -72,6 +76,7 @@ namespace roxy_tool.Views
         bool waitingForBootloader;
         string serialForBootloader;
         EventHandler<FlashEventArgs> flashElfEvent;
+        Dictionary<BoardType, string> latestFirmwarePaths = new Dictionary<BoardType, string>();
 
         // Devices
         BoardType currentBoard = BoardType.Roxy;
@@ -116,6 +121,8 @@ namespace roxy_tool.Views
 
             this.loadElfButton = this.FindControl<Button>("loadElfButton");
             loadElfButton.Click += LoadElfFile;
+            this.getLatestButton = this.FindControl<Button>("getLatestButton");
+            getLatestButton.Click += GetLatestFirmware;
             this.elfFilenameText = this.FindControl<TextBlock>("elfFilenameText");
             this.flashElfButton = this.FindControl<Button>("flashElfButton");
             flashElfButton.Click += FlashElfButton;
@@ -294,36 +301,91 @@ namespace roxy_tool.Views
                 {
                     elfData = new byte[0];
                     elfFilePath = files.First();
-                    elfFilenameText.Text = elfFilePath;
 
-                    using (var elf = ELFReader.Load(elfFilePath))
-                    {
-                        // Sections that are relevant:
-                        // Section 1, 2, 3, 4
-                        // TODO: Remove hardcode
-
-                        for (int i = 1; i < 5; i++)
-                        {
-                            int offset = elfData.Length;
-                            var data = elf.Sections[i].GetContents();
-                            Array.Resize(ref elfData, elfData.Length + data.Length);
-                            data.CopyTo(elfData, offset);
-                        }
-
-                        float num = (float)elfData.Length / 64;
-                        double frac = num - Math.Floor(num);
-                        int padding = (int)((1.0f - frac) * 64);
-                        Array.Resize(ref elfData, elfData.Length + padding);
-
-                        StatusWrite("ELF file loaded!");
-                        isElfLoaded = true;
-                        SetFlashButtonStatus(isElfLoaded && (SelectedDevice != null));
-                    }
+                    loadFile(elfFilePath);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+            }
+        }
+
+        private void loadFile(string path)
+        {
+            elfFilenameText.Text = path;
+            using (var elf = ELFReader.Load(path))
+            {
+                // Sections that are relevant:
+                // Section 1, 2, 3, 4
+                // TODO: Remove hardcode
+
+                for (int i = 1; i < 5; i++)
+                {
+                    int offset = elfData.Length;
+                    var data = elf.Sections[i].GetContents();
+                    Array.Resize(ref elfData, elfData.Length + data.Length);
+                    data.CopyTo(elfData, offset);
+                }
+
+                float num = (float)elfData.Length / 64;
+                double frac = num - Math.Floor(num);
+                int padding = (int)((1.0f - frac) * 64);
+                Array.Resize(ref elfData, elfData.Length + padding);
+
+                StatusWrite("ELF file loaded!");
+                isElfLoaded = true;
+                SetFlashButtonStatus(isElfLoaded && (SelectedDevice != null));
+            }
+        }
+
+        private async void GetLatestFirmware(object sender, RoutedEventArgs args)
+        {
+            try
+            {
+                if (latestFirmwarePaths.Count == 0)
+                {
+                    var httpClient = new HttpClient();
+                    httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("anonymous", "1"));
+                    var latest = await httpClient.GetStringAsync($"https://api.github.com/repos/veroxzik/roxy-firmware/releases/latest");
+                    using (var doc = JsonDocument.Parse(latest, new JsonDocumentOptions { AllowTrailingCommas = true }))
+                    {
+                        var releaseInfo = doc.RootElement.EnumerateObject();
+                        var assets = releaseInfo.FirstOrDefault(x => x.Name == "assets");
+                        if (assets.Value.ValueKind != JsonValueKind.Undefined)
+                        {
+                            var assetInfo = assets.Value.EnumerateArray();
+                            using (var webClient = new WebClient())
+                            {
+                                foreach (var asset in assetInfo)
+                                {
+                                    var parsed = asset.EnumerateObject();
+                                    var url = parsed.FirstOrDefault(x => x.Name == "browser_download_url").Value.ToString();
+                                    var name = Path.GetFileName(url);
+                                    string path = Path.GetTempPath() + name;
+
+                                    if (name.Contains("arcin"))
+                                        latestFirmwarePaths[BoardType.arcinRoxy] = path;
+                                    else
+                                        latestFirmwarePaths[BoardType.Roxy] = path;
+                                    webClient.DownloadFile(new Uri(url), path);
+                                }
+                            }
+                        }
+                    }
+                    string ver = Path.GetFileNameWithoutExtension(latestFirmwarePaths[BoardType.Roxy].Replace("roxy_", string.Empty));
+                    StatusWrite($"Downloaded {ver} successfully.");
+                    getLatestButton.Content += $": {ver}";
+                }
+
+                if(SelectedDevice != null && SelectedDevice.BoardType != BoardType.arcin)
+                {
+                    loadFile(latestFirmwarePaths[SelectedDevice.BoardType]);
+                }
+            } 
+            catch (Exception e)
+            {
+                StatusWrite("Could not download the latest firmware.");
             }
         }
 
