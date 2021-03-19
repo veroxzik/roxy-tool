@@ -76,7 +76,8 @@ namespace roxy_tool.Views
         bool waitingForBootloader;
         string serialForBootloader;
         EventHandler<FlashEventArgs> flashElfEvent;
-        Dictionary<BoardType, string> latestFirmwarePaths = new Dictionary<BoardType, string>();
+        Dictionary<BoardType, byte[]> latestFirmwareDownload = new Dictionary<BoardType, byte[]>();
+        string versionString = "";
 
         // Devices
         BoardType currentBoard = BoardType.Roxy;
@@ -302,7 +303,9 @@ namespace roxy_tool.Views
                     elfData = new byte[0];
                     elfFilePath = files.First();
 
-                    loadFile(elfFilePath);
+                    elfFilenameText.Text = elfFilePath;
+                    var rawFile = File.ReadAllBytes(elfFilePath);
+                    loadElfBytes(rawFile);
                 }
             }
             catch (Exception e)
@@ -311,31 +314,33 @@ namespace roxy_tool.Views
             }
         }
 
-        private void loadFile(string path)
+        private void loadElfBytes(byte[] rawFile)
         {
-            elfFilenameText.Text = path;
-            using (var elf = ELFReader.Load(path))
+            using (var dataStream = new MemoryStream(rawFile))
             {
-                // Sections that are relevant:
-                // Section 1, 2, 3, 4
-                // TODO: Remove hardcode
-
-                for (int i = 1; i < 5; i++)
+                using (var elf = ELFReader.Load(dataStream, false))
                 {
-                    int offset = elfData.Length;
-                    var data = elf.Sections[i].GetContents();
-                    Array.Resize(ref elfData, elfData.Length + data.Length);
-                    data.CopyTo(elfData, offset);
+                    // Sections that are relevant:
+                    // Section 1, 2, 3, 4
+                    // TODO: Remove hardcode
+
+                    for (int i = 1; i < 5; i++)
+                    {
+                        int offset = elfData.Length;
+                        var data = elf.Sections[i].GetContents();
+                        Array.Resize(ref elfData, elfData.Length + data.Length);
+                        data.CopyTo(elfData, offset);
+                    }
+
+                    float num = (float)elfData.Length / 64;
+                    double frac = num - Math.Floor(num);
+                    int padding = (int)((1.0f - frac) * 64);
+                    Array.Resize(ref elfData, elfData.Length + padding);
+
+                    StatusWrite("ELF file loaded!");
+                    isElfLoaded = true;
+                    SetFlashButtonStatus(isElfLoaded && (SelectedDevice != null));
                 }
-
-                float num = (float)elfData.Length / 64;
-                double frac = num - Math.Floor(num);
-                int padding = (int)((1.0f - frac) * 64);
-                Array.Resize(ref elfData, elfData.Length + padding);
-
-                StatusWrite("ELF file loaded!");
-                isElfLoaded = true;
-                SetFlashButtonStatus(isElfLoaded && (SelectedDevice != null));
             }
         }
 
@@ -343,7 +348,7 @@ namespace roxy_tool.Views
         {
             try
             {
-                if (latestFirmwarePaths.Count == 0)
+                if (latestFirmwareDownload.Count == 0)
                 {
                     var httpClient = new HttpClient();
                     httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("anonymous", "1"));
@@ -361,26 +366,26 @@ namespace roxy_tool.Views
                                 {
                                     var parsed = asset.EnumerateObject();
                                     var url = parsed.FirstOrDefault(x => x.Name == "browser_download_url").Value.ToString();
-                                    var name = Path.GetFileName(url);
-                                    string path = Path.GetTempPath() + name;
 
-                                    if (name.Contains("arcin"))
-                                        latestFirmwarePaths[BoardType.arcinRoxy] = path;
+                                    if (url.Contains("arcin"))
+                                        latestFirmwareDownload[BoardType.arcinRoxy] = webClient.DownloadData(new Uri(url));
                                     else
-                                        latestFirmwarePaths[BoardType.Roxy] = path;
-                                    webClient.DownloadFile(new Uri(url), path);
+                                    {
+                                        latestFirmwareDownload[BoardType.Roxy] = webClient.DownloadData(new Uri(url));
+                                        versionString = Path.GetFileNameWithoutExtension(url.Replace("roxy_", string.Empty));
+                                    }
                                 }
                             }
                         }
                     }
-                    string ver = Path.GetFileNameWithoutExtension(latestFirmwarePaths[BoardType.Roxy].Replace("roxy_", string.Empty));
-                    StatusWrite($"Downloaded {ver} successfully.");
-                    getLatestButton.Content += $": {ver}";
+                    StatusWrite($"Downloaded {versionString} successfully.");
+                    getLatestButton.Content += $": {versionString}";
                 }
 
                 if(SelectedDevice != null && SelectedDevice.BoardType != BoardType.arcin)
                 {
-                    loadFile(latestFirmwarePaths[SelectedDevice.BoardType]);
+                    elfFilenameText.Text = "Loaded from memory";
+                    loadElfBytes(latestFirmwareDownload[SelectedDevice.BoardType]);
                 }
             } 
             catch (Exception e)
