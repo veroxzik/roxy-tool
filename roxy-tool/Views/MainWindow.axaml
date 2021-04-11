@@ -36,6 +36,9 @@
 				<DataGridTextColumn Header="Board Type"
 									Binding="{Binding BoardTypeString}"
 									Width="*" />
+        <DataGridTextColumn Header="Board Version"
+									Binding="{Binding BoardVersionString}"
+									Width="*" />
         <DataGridTextColumn Header="Firmware Ver."
 									Binding="{Binding FirmwareVersion}"
 									Width="*" />

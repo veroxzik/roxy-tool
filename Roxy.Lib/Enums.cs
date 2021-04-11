@@ -16,4 +16,11 @@ namespace Roxy.Lib
         IIDX,
         SDVX
     }
+
+    public enum BoardVersion
+    {
+        Undefined,
+        RoxyV1_1,
+        RoxyV2_0
+    }
 }

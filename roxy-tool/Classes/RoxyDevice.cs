@@ -33,6 +33,22 @@ namespace roxy_tool.Classes
         public bool IsBootloader { get; private set; }
         public string SerialNumber { get { return Device?.GetSerialNumber(); } }
         public string FirmwareVersion { get; private set; }
+        public BoardVersion BoardVersion { get; private set; }
+        public string BoardVersionString
+        {
+            get
+            {
+                switch (BoardVersion)
+                {
+                    case BoardVersion.RoxyV1_1:
+                        return "v1.1";
+                    case BoardVersion.RoxyV2_0:
+                        return "v2.0";
+                    default:
+                        return "Unknown";
+                }
+            }
+        }
         public string BoardName
         {
             get
@@ -90,6 +106,7 @@ namespace roxy_tool.Classes
             {
                 ReadConfig();
                 GetFirmwareVersion();
+                GetBoardVersion();
             }
         }
 
@@ -179,6 +196,49 @@ namespace roxy_tool.Classes
                         if (version[0] == 0xa0)
                         {
                             FirmwareVersion = Encoding.ASCII.GetString(version.Skip(4).ToArray()).Trim('\0');
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //StatusWrite("Failed to get config. Please disconnect and reconnect the board.");
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                //StatusWrite("Failed to open device. Please disconnect and reconnect.");
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool GetBoardVersion()
+        {
+            BoardVersion = BoardVersion.Undefined;
+            HidStream hidStream;
+            if (Device.TryOpen(out hidStream))
+            {
+                using (hidStream)
+                {
+                    try
+                    {
+                        byte[] version = new byte[64];
+                        version[0] = 0xa4;
+                        hidStream.GetFeature(version);
+                        if (version[0] == 0xa4)
+                        {
+                            string ver = Encoding.ASCII.GetString(version.Skip(4).ToArray()).Trim('\0');
+                            switch (ver)
+                            {
+                                case "Roxy v1.1":
+                                    BoardVersion = BoardVersion.RoxyV1_1;
+                                    break;
+                                case "Roxy v2.0":
+                                    BoardVersion = BoardVersion.RoxyV2_0;
+                                    break;
+                            }
                         }
                     }
                     catch (Exception ex)
