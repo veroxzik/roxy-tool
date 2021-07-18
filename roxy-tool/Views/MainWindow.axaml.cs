@@ -536,7 +536,7 @@ namespace roxy_tool.Views
                         if (dev.KeyConfig != null)
                         {
                             keyMappingControl.SetMapping(dev.KeyConfig.KeyMapping);
-                            buttonLedControl.SetMapping(dev.KeyConfig.LedMode);
+                            buttonLedControl.SetMapping(dev.KeyConfig.LedMode, dev.KeyConfig.LedType, dev.RgbConfig.ButtonLedHue);
                             joystickMappingControl.SetMapping(dev.KeyConfig.JoystickMapping);
                             ttControl.SetMapping(dev.RgbConfig.TurntableMapping);
                         }
@@ -575,18 +575,20 @@ namespace roxy_tool.Views
                     // Get RGB bytes
                     var rgbMapping = configPanel.GetRgbMapping();
                     var ttMapping = ttControl.GetMapping();
+                    var buttonRgbMapping = buttonLedControl.GetRgbMapping();
                     byte[] rgbBytes = new byte[64];
                     rgbBytes[0] = 0xc0; // Report ID
                     rgbBytes[1] = 0x01; // RGB config is Segment 1
-                    rgbBytes[2] = (byte)(rgbMapping.Length + ttMapping.Length); // Length
+                    rgbBytes[2] = (byte)(rgbMapping.Length + ttMapping.Length + buttonRgbMapping.Length); // Length
                     rgbBytes[3] = 0x00; // Padding
                     Array.Copy(rgbMapping, 0, rgbBytes, 4, rgbMapping.Length);
                     Array.Copy(ttMapping, 0, rgbBytes, 4 + rgbMapping.Length, ttMapping.Length);
+                    Array.Copy(buttonRgbMapping, 0, rgbBytes, 4 + rgbMapping.Length + ttMapping.Length, buttonRgbMapping.Length);
                     configBytes.Add(rgbBytes);
 
                     // Get mapping bytes
                     var keyMapping = keyMappingControl.GetMapping();
-                    var ledMapping = buttonLedControl.GetMapping();
+                    var ledMapping = buttonLedControl.GetTypeMapping();
                     var joyMapping = joystickMappingControl.GetMapping();
                     byte[] mappingBytes = new byte[64];
                     mappingBytes[0] = 0xc0; // Report ID

@@ -146,6 +146,13 @@ namespace Roxy.Lib
             "Fade Out (Invert)"
         };
 
+        public static readonly List<string> ButtonLightTypes = new List<string>()
+        {
+            "Standard",
+            "WS2812b (Inverted)",
+            "WS2812b (Standard)"
+        };
+
         public static readonly List<string> ButtonList = new List<string>()
         {
             "Disabled",

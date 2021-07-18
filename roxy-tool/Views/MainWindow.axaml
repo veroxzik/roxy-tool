@@ -3,7 +3,7 @@
 		x:Class="roxy_tool.Views.MainWindow"
 		xmlns:rx="clr-namespace:roxy_tool.UserControls"
 		Icon="/Assets/VXZK.ico"
-		Width="550" Height="800"
+		Width="650" Height="800"
 		MinWidth="550" MinHeight="640"
 		Title="Roxy Tool">
 	<Grid>

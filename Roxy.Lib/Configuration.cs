@@ -76,8 +76,8 @@ namespace Roxy.Lib
         public byte Mode { get; set; }
         public byte Led1Hue { get; set; }
         public byte Led2Hue { get; set; }
-
         public byte[] TurntableMapping { get; set; }
+        public byte[] ButtonLedHue { get; set; }
 
         public RgbConfiguration(byte[] bytes)
         {
@@ -85,6 +85,7 @@ namespace Roxy.Lib
             Led1Hue = bytes[5];
             Led2Hue = bytes[6];
             TurntableMapping = bytes.Skip(7).Take(7).ToArray();
+            ButtonLedHue = bytes.Skip(14).Take(12).ToArray();
         }
         public override byte[] GetBytes()
         {
@@ -106,12 +107,14 @@ namespace Roxy.Lib
         public byte[] KeyMapping { get; private set; }
         public byte[] JoystickMapping { get; private set; }
         public byte[] LedMode { get; private set; }
+        public byte[] LedType { get; private set; }
 
         public KeyMappingConfiguration(byte[] bytes)
         {
             KeyMapping = bytes.Skip(4).Take(16).ToArray();
             JoystickMapping = bytes.Skip(20).Take(6).ToArray();
             LedMode = bytes.Skip(26).Take(8).ToArray();
+            LedType = bytes.Skip(34).Take(6).ToArray();
         }
 
         public override byte[] GetBytes()
@@ -124,6 +127,7 @@ namespace Roxy.Lib
             Array.Copy(KeyMapping, 0, configBytes, 4, 16);
             Array.Copy(JoystickMapping, 0, configBytes, 20, 6);
             Array.Copy(LedMode, 0, configBytes, 26, 8);
+            Array.Copy(LedType, 0, configBytes, 34, 6);
 
             return configBytes;
         }

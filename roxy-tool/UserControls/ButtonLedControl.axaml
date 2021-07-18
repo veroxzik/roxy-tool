@@ -2,60 +2,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             x:Class="roxy_tool.UserControls.ButtonLedControl">
-  <StackPanel Orientation="Vertical">
-    <Grid ColumnDefinitions="80,*,20"
-          Margin="5 5 5 5">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="30" />
-        <RowDefinition Height="36" />
-      </Grid.RowDefinitions>
-      <TextBlock Grid.Row="0" Margin="0 5 0 0">Button 1</TextBlock>
-      <TextBlock Grid.Row="1" Margin="0 5 0 0">Button 2</TextBlock>
-      <TextBlock Grid.Row="2" Margin="0 5 0 0">Button 3</TextBlock>
-      <TextBlock Grid.Row="3" Margin="0 5 0 0">Button 4</TextBlock>
-      <TextBlock Grid.Row="4" Margin="0 5 0 0">Button 5</TextBlock>
-      <TextBlock Grid.Row="5" Margin="0 5 0 0">Button 6</TextBlock>
-      <TextBlock Grid.Row="6" Margin="0 5 0 0">Button 7</TextBlock>
-      <TextBlock Grid.Row="7" Margin="0 5 0 0">Button 8</TextBlock>
-      <TextBlock Grid.Row="8" Margin="0 5 0 0">Button 9</TextBlock>
-      <TextBlock Grid.Row="9" Margin="0 5 0 0">Button 10</TextBlock>
-      <TextBlock Grid.Row="10" Margin="0 5 0 0">Button 11</TextBlock>
-      <TextBlock Grid.Row="11" Margin="0 5 0 0">Button 12</TextBlock>
-      <TextBlock Grid.Row="12" Margin="0 10 0 0">Fade Time</TextBlock>
-      <TextBlock Grid.Row="12" Grid.Column="2" Margin="0 5 0 0">ms</TextBlock>
-      <ComboBox x:Name="button1Combo" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button2Combo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button3Combo" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button4Combo" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button5Combo" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button6Combo" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button7Combo" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button8Combo" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button9Combo" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button10Combo" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button11Combo" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <ComboBox x:Name="button12Combo" Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 0 5 "/>
-      <NumericUpDown x:Name="fadeTimeNumeric" Grid.Row="12" Grid.Column="1" Margin="0 0 5 0" Minimum="0" Maximum="2000" />
-    </Grid>
-    <Grid ColumnDefinitions="*,*" RowDefinitions="*"
-          Margin="0 0 0 5">
-      <Button x:Name="okButton"
-              Margin="5 0 2 0">OK</Button>
-      <Button x:Name="cancelButton"
-              Grid.Column="1"
-              Margin="2 0 5 0">Cancel</Button>
-    </Grid>
-  </StackPanel>
+             x:Class="roxy_tool.UserControls.ButtonLedControl"
+             xmlns:rx="clr-namespace:roxy_tool.UserControls">
+  <Grid>
+    <ScrollViewer x:Name="mainScrollViewer">
+      <StackPanel Orientation="Vertical">
+        <Grid ColumnDefinitions="80,*,*,*"
+              Margin="5 5 5 5">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="36" />
+          </Grid.RowDefinitions>
+          <TextBlock Grid.Row="0" Grid.Column="1" Margin="0 5 5 0">LED Mode</TextBlock>
+          <TextBlock Grid.Row="0" Grid.Column="2" Margin="5 5 0 0">LED Type</TextBlock>
+          <TextBlock Grid.Row="0" Grid.Column="3" Margin="5 5 0 0">LED Color</TextBlock>
+          <TextBlock Grid.Row="1" Margin="0 5 0 0">Button 1</TextBlock>
+          <TextBlock Grid.Row="2" Margin="0 5 0 0">Button 2</TextBlock>
+          <TextBlock Grid.Row="3" Margin="0 5 0 0">Button 3</TextBlock>
+          <TextBlock Grid.Row="4" Margin="0 5 0 0">Button 4</TextBlock>
+          <TextBlock Grid.Row="5" Margin="0 5 0 0">Button 5</TextBlock>
+          <TextBlock Grid.Row="6" Margin="0 5 0 0">Button 6</TextBlock>
+          <TextBlock Grid.Row="7" Margin="0 5 0 0">Button 7</TextBlock>
+          <TextBlock Grid.Row="8" Margin="0 5 0 0">Button 8</TextBlock>
+          <TextBlock Grid.Row="9" Margin="0 5 0 0">Button 9</TextBlock>
+          <TextBlock Grid.Row="10" Margin="0 5 0 0">Button 10</TextBlock>
+          <TextBlock Grid.Row="11" Margin="0 5 0 0">Button 11</TextBlock>
+          <TextBlock Grid.Row="12" Margin="0 5 0 0">Button 12</TextBlock>
+          <TextBlock Grid.Row="13" Margin="0 10 0 0">Fade Time</TextBlock>
+          <TextBlock Grid.Row="14" Grid.Column="2" Margin="0 5 0 0">ms</TextBlock>
+          <ComboBox x:Name="button1ModeCombo" Grid.Row="1" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button2ModeCombo" Grid.Row="2" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button3ModeCombo" Grid.Row="3" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button4ModeCombo" Grid.Row="4" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button5ModeCombo" Grid.Row="5" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button6ModeCombo" Grid.Row="6" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button7ModeCombo" Grid.Row="7" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button8ModeCombo" Grid.Row="8" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button9ModeCombo" Grid.Row="9" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button10ModeCombo" Grid.Row="10" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button11ModeCombo" Grid.Row="11" Grid.Column="1" Margin="0 0 0 5 "/>
+          <ComboBox x:Name="button12ModeCombo" Grid.Row="12" Grid.Column="1" Margin="0 0 0 5 "/>
+          <NumericUpDown x:Name="fadeTimeNumeric" Grid.Row="13" Grid.Column="1" Margin="0 0 5 0" Minimum="0" Maximum="2000" />
+          <ComboBox x:Name="button1TypeCombo" Grid.Row="1" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button2TypeCombo" Grid.Row="2" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button3TypeCombo" Grid.Row="3" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button4TypeCombo" Grid.Row="4" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button5TypeCombo" Grid.Row="5" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button6TypeCombo" Grid.Row="6" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button7TypeCombo" Grid.Row="7" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button8TypeCombo" Grid.Row="8" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button9TypeCombo" Grid.Row="9" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button10TypeCombo" Grid.Row="10" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button11TypeCombo" Grid.Row="11" Grid.Column="2" Margin="5 0 0 5 "/>
+          <ComboBox x:Name="button12TypeCombo" Grid.Row="12" Grid.Column="2" Margin="5 0 0 5 "/>
+          <Button x:Name="button1RgbButton" Grid.Row="1" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button2RgbButton" Grid.Row="2" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button3RgbButton" Grid.Row="3" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button4RgbButton" Grid.Row="4" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button5RgbButton" Grid.Row="5" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button6RgbButton" Grid.Row="6" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button7RgbButton" Grid.Row="7" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button8RgbButton" Grid.Row="8" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button9RgbButton" Grid.Row="9" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button10RgbButton" Grid.Row="10" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button11RgbButton" Grid.Row="11" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+          <Button x:Name="button12RgbButton" Grid.Row="12" Grid.Column="3" Margin="5 0 0 5" IsEnabled="False"/>
+        </Grid>
+        <Grid ColumnDefinitions="*,*" RowDefinitions="*"
+              Margin="0 0 0 5">
+          <Button x:Name="okButton"
+                  Margin="5 0 2 0">OK</Button>
+          <Button x:Name="cancelButton"
+                  Grid.Column="1"
+                  Margin="2 0 5 0">Cancel</Button>
+        </Grid>
+      </StackPanel>
+    </ScrollViewer>
+    <ScrollViewer x:Name="rgbScrollViewer"
+                  IsVisible="False">
+      <rx:HueColorSliderControl x:Name="rgbControl" />
+    </ScrollViewer>
+  </Grid>
 </UserControl>

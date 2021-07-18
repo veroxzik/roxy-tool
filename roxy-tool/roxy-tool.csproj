@@ -5,12 +5,12 @@
     <RootNamespace>roxy_tool</RootNamespace>
     <AssemblyName>roxy-tool</AssemblyName>
     <ApplicationIcon>VXZK.ico</ApplicationIcon>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Authors>Verox Zik</Authors>
     <Company>VXZK Designs</Company>
     <Product>Roxy Tool</Product>
     <PackageId>Roxy Tool</PackageId>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
