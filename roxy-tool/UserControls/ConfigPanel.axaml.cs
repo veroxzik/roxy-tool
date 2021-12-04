@@ -47,6 +47,7 @@ namespace roxy_tool.UserControls
             options[OptionStrings.DeviceControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.DeviceControl); });
             options[OptionStrings.JoystickMapping].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.JoystickMapping); });
             options[OptionStrings.TurntableControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.TurntableControl); });
+            options[OptionStrings.ArgbControl].Click += ((s, e) => { InvokeSubPanel(ControlSubPanel.ArgbControl); });
         }
 
         private void InvokeSubPanel(ControlSubPanel panel, byte value = 0)
@@ -72,8 +73,10 @@ namespace roxy_tool.UserControls
             options[OptionStrings.FlagsCheck].SetCheck(stdConfig.Flags);
             options[OptionStrings.Qe1Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE1Sens));
             options[OptionStrings.Qe1ReductionRatio].SetCombo(stdConfig.QE1ReductionRatio);
+            options[OptionStrings.Qe1DeadzoneAngle].SetCombo(stdConfig.QE1AxisDeadzone);
             options[OptionStrings.Qe2Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE2Sens));
             options[OptionStrings.Qe2ReductionRatio].SetCombo(stdConfig.QE2ReductionRatio);
+            options[OptionStrings.Qe2DeadzoneAngle].SetCombo(stdConfig.QE2AxisDeadzone);
             options[OptionStrings.Ps2Mode].SetCombo(stdConfig.PS2Mode);
             options[OptionStrings.RgbInterface].SetCombo(stdConfig.RgbInterface);
             options[OptionStrings.RgbBrightness].SetNumber(stdConfig.RgbBrightness);
@@ -94,7 +97,7 @@ namespace roxy_tool.UserControls
 
         public byte[] GetStdMapping()
         {
-            byte[] config = new byte[28];
+            byte[] config = new byte[30];
             byte[] label = Encoding.ASCII.GetBytes(options[OptionStrings.BoardLabel].GetText());
             Array.Resize(ref label, 12);
             Array.Copy(label, 0, config, 0, 12);
@@ -112,6 +115,8 @@ namespace roxy_tool.UserControls
             config[25] = (byte)options[OptionStrings.Qe1ReductionRatio].GetCombo();
             config[26] = (byte)options[OptionStrings.Qe2ReductionRatio].GetCombo();
             config[27] = (byte)options[OptionStrings.AxisSustainTime].GetNumber();
+            config[28] = (byte)options[OptionStrings.Qe1DeadzoneAngle].GetNumber();
+            config[29] = (byte)options[OptionStrings.Qe2DeadzoneAngle].GetNumber();
 
             return config;
         }

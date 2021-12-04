@@ -12,6 +12,7 @@ namespace roxy_tool.Enums
         ButtonLedMode,
         DeviceControl,
         JoystickMapping,
-        TurntableControl
+        TurntableControl,
+        ArgbControl
     }
 }

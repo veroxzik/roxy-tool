@@ -69,6 +69,9 @@ namespace roxy_tool.Views
         TurntableControl ttControl;
         ScrollViewer ttScrollViewer;
 
+        ArgbControl argbControl;
+        ScrollViewer argbScrollViewer;
+
         // Flashing
         string elfFilePath;
         byte[] elfData = new byte[0];
@@ -165,6 +168,10 @@ namespace roxy_tool.Views
             this.ttControl = this.FindControl<TurntableControl>("ttControl");
             ttControl.OnClosed += configControl_Closed;
             this.ttScrollViewer = this.Find<ScrollViewer>("ttScrollViewer");
+
+            this.argbControl = this.FindControl<ArgbControl>("argbControl");
+            argbControl.OnClosed += configControl_Closed;
+            this.argbScrollViewer = this.Find<ScrollViewer>("argbScrollViewer");
 
             var svre9left = this.FindControl<Button>("svre9Left");
             svre9left.Click += ((s, e) =>
@@ -283,6 +290,10 @@ namespace roxy_tool.Views
                 {
                     configTab.IsEnabled = false;
                     StatusWrite("No devices found. If one is connected, please unplug it and try again.");
+#if DEBUG
+                    // Enable tab in debug
+                    configTab.IsEnabled = true;
+#endif
                 }
                 else
                 {
@@ -539,6 +550,7 @@ namespace roxy_tool.Views
                             buttonLedControl.SetMapping(dev.KeyConfig.LedMode, dev.KeyConfig.LedType, dev.RgbConfig.ButtonLedHue);
                             joystickMappingControl.SetMapping(dev.KeyConfig.JoystickMapping);
                             ttControl.SetMapping(dev.RgbConfig.TurntableMapping);
+                            argbControl.SetMapping(dev.RgbConfig.ArgbMapping);
                         }
                         if (dev.DeviceConfig != null)
                             deviceControl.SetMapping(dev.DeviceConfig.Data);
@@ -576,14 +588,16 @@ namespace roxy_tool.Views
                     var rgbMapping = configPanel.GetRgbMapping();
                     var ttMapping = ttControl.GetMapping();
                     var buttonRgbMapping = buttonLedControl.GetRgbMapping();
+                    var argbMapping = argbControl.GetMapping();
                     byte[] rgbBytes = new byte[64];
                     rgbBytes[0] = 0xc0; // Report ID
                     rgbBytes[1] = 0x01; // RGB config is Segment 1
-                    rgbBytes[2] = (byte)(rgbMapping.Length + ttMapping.Length + buttonRgbMapping.Length); // Length
+                    rgbBytes[2] = (byte)(rgbMapping.Length + ttMapping.Length + buttonRgbMapping.Length + argbMapping.Length); // Length
                     rgbBytes[3] = 0x00; // Padding
                     Array.Copy(rgbMapping, 0, rgbBytes, 4, rgbMapping.Length);
                     Array.Copy(ttMapping, 0, rgbBytes, 4 + rgbMapping.Length, ttMapping.Length);
                     Array.Copy(buttonRgbMapping, 0, rgbBytes, 4 + rgbMapping.Length + ttMapping.Length, buttonRgbMapping.Length);
+                    Array.Copy(argbMapping, 0, rgbBytes, 4 + rgbMapping.Length + ttMapping.Length + buttonRgbMapping.Length, argbMapping.Length);
                     configBytes.Add(rgbBytes);
 
                     // Get mapping bytes
@@ -702,6 +716,9 @@ namespace roxy_tool.Views
                         break;
                     case ControlSubPanel.TurntableControl:
                         ttScrollViewer.IsVisible = true;
+                        break;
+                    case ControlSubPanel.ArgbControl:
+                        argbScrollViewer.IsVisible = true;
                         break;
                     default:
                         break;

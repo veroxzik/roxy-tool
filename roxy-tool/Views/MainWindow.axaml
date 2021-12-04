@@ -118,6 +118,12 @@
                           IsVisible="False">
               <rx:TurntableControl x:Name="ttControl" />
             </ScrollViewer>
+            <ScrollViewer x:Name="argbScrollViewer"
+                          Grid.Row="1"
+                          VerticalScrollBarVisibility="Visible"
+                          IsVisible="False">
+              <rx:ArgbControl x:Name="argbControl" />
+            </ScrollViewer>
           </Grid>
 				</TabItem>
         <TabItem Header="Devices">

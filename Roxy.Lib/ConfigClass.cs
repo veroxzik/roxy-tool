@@ -169,6 +169,17 @@ namespace Roxy.Lib
             "Button 11",
             "Button 12"
         };
+
+        public static readonly List<string> ArgbModes = new List<string>()
+        {
+            "Disbled",
+            "Turntable",
+            "Turbocharger (Full)",
+            "Turbocharger (Left)",
+            "Turbocharger (Right)",
+            "Wing (Left)",
+            "Wing (Right)"
+        };
     }
 
     public class KeyEntry

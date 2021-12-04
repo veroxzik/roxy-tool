@@ -17,6 +17,8 @@
         public static readonly string Qe2Sensitivity = "qe2Combo";
         public static readonly string Qe1ReductionRatio = "qe1ReductionCombo";
         public static readonly string Qe2ReductionRatio = "qe2ReductionCombo";
+        public static readonly string Qe1DeadzoneAngle = "qe1DeadzoneAngle";
+        public static readonly string Qe2DeadzoneAngle = "qe2DeadzoneAngle";
         public static readonly string Ps2Mode = "ps2Combo";
         public static readonly string RgbInterface = "rgbInterfaceCombo";
         public static readonly string RgbBrightness = "rgbBrightnessValue";
@@ -34,5 +36,6 @@
         public static readonly string DeviceControl = "deviceControl";
         public static readonly string JoystickMapping = "joystickMapping";
         public static readonly string TurntableControl = "ttControl";
+        public static readonly string ArgbControl = "argbControl";
     }
 }

@@ -25,6 +25,8 @@ namespace Roxy.Lib
         public byte QE1ReductionRatio { get; set; }
         public byte QE2ReductionRatio { get; set; }
         public byte AxisSustain { get; set; }
+        public byte QE1AxisDeadzone { get; set; }
+        public byte QE2AxisDeadzone { get; set; }
 
         public StandardConfiguration(byte[] bytes)
         {
@@ -42,6 +44,8 @@ namespace Roxy.Lib
             QE1ReductionRatio = bytes[29];
             QE2ReductionRatio = bytes[30];
             AxisSustain = bytes[31];
+            QE1AxisDeadzone = bytes[32];
+            QE2AxisDeadzone = bytes[33];
         }
         public override byte[] GetBytes()
         {
@@ -66,6 +70,8 @@ namespace Roxy.Lib
             configBytes[29] = QE1ReductionRatio;
             configBytes[30] = QE2ReductionRatio;
             configBytes[31] = AxisSustain;
+            configBytes[32] = QE1AxisDeadzone;
+            configBytes[33] = QE2AxisDeadzone;
 
             return configBytes;
         }
@@ -78,6 +84,7 @@ namespace Roxy.Lib
         public byte Led2Hue { get; set; }
         public byte[] TurntableMapping { get; set; }
         public byte[] ButtonLedHue { get; set; }
+        public byte[] ArgbMapping { get; set; }
 
         public RgbConfiguration(byte[] bytes)
         {
@@ -86,6 +93,7 @@ namespace Roxy.Lib
             Led2Hue = bytes[6];
             TurntableMapping = bytes.Skip(7).Take(7).ToArray();
             ButtonLedHue = bytes.Skip(14).Take(12).ToArray();
+            ArgbMapping = bytes.Skip(26).Take(7).ToArray();
         }
         public override byte[] GetBytes()
         {

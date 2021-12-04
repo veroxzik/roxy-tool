@@ -22,7 +22,11 @@
                      ConfigSettings="rxa"/>
     <rx:ConfigOption x:Name="qe1ReductionCombo"
                      LabelText="QE1 Reduction Ratio"
-                     ComboOptions="1|1.5|2|2.5|3|3.5|4|4.5|5|5.5|6|6.5|7|7.5|8"
+                     ComboOptions="1|1.5|2|2.5|3|3.5|4|4.5|5|5.5|6|6.5|7|7.5|8|8.5|9|9.5|10|10.5|11|11.5|12|12.5|13|13.5|14|14.5|15|15.5|16"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="qe1DeadzoneAngle"
+                     LabelText="QE1 Deadzone Angle"
+                     NumericOptions="0|255|°/2"
                      ConfigSettings="rx"/>
     <rx:ConfigOption x:Name="qe2Combo"
                      LabelText="QE2 Sensitivity"
@@ -31,6 +35,10 @@
     <rx:ConfigOption x:Name="qe2ReductionCombo"
                      LabelText="QE2 Reduction Ratio"
                      ComboOptions="1|1.5|2|2.5|3|3.5|4|4.5|5|5.5|6|6.5|7|7.5|8"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="qe2DeadzoneAngle"
+                     LabelText="QE2 Deadzone Angle"
+                     NumericOptions="0|255|°/2"
                      ConfigSettings="rx"/>
     <rx:ConfigOption x:Name="ps2Combo"
                      LabelText="PS2 Mode"
@@ -91,6 +99,10 @@
     <rx:ConfigOption x:Name="ttControl"
                      LabelText="Turntable Options"
                      ButtonText="Turntable Options"
+                     ConfigSettings="rx"/>
+    <rx:ConfigOption x:Name="argbControl"
+                     LabelText="ARGB Options"
+                     ButtonText="ARGB Options"
                      ConfigSettings="rx"/>
   </StackPanel>
 </UserControl>
