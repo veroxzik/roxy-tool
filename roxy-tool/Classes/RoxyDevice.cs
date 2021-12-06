@@ -91,6 +91,7 @@ namespace roxy_tool.Classes
         public RgbConfiguration RgbConfig { get; private set; }
         public KeyMappingConfiguration KeyConfig { get; private set; }
         public DeviceConfiguration DeviceConfig { get; private set; }
+        public int NumConfigPages { get; private set; }
 
         public static Action<string> StatusWrite { get; set; }
 
@@ -155,25 +156,16 @@ namespace roxy_tool.Classes
                                 attempts++;
                             }
                         }
-                        if (configBytes.Count == 0)
-                        {
-                            //StatusWrite("Failed to get any config reports.");
-                        }
-                        else
-                        {
-                            //StatusWrite($"Found {configBytes.Count} config reports.");
-                        }
+                        NumConfigPages = configBytes.Count;
                     }
                     catch (Exception ex)
                     {
-                        //StatusWrite("Failed to get config. Please disconnect and reconnect the board.");
                         return false;
                     }
                 }
             }
             else
             {
-                //StatusWrite("Failed to open device. Please disconnect and reconnect.");
                 return false;
             }
 

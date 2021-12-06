@@ -527,6 +527,7 @@ namespace roxy_tool.Views
             if (result == true)
             {
                 UpdateControls();
+                StatusWrite($"Read {SelectedDevice?.NumConfigPages} config pages.");
             }
             else if (result == false)
             {

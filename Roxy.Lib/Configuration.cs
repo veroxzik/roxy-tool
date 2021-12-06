@@ -52,7 +52,7 @@ namespace Roxy.Lib
             byte[] configBytes = new byte[64];
             configBytes[0] = 0xc0;  // Report ID
             configBytes[1] = 0x00;  // Segment must be 0
-            configBytes[2] = 0x1C;  // Roxy is 28 bytes
+            configBytes[2] = 0x1E;  // Roxy is 30 bytes
             configBytes[3] = 0x00;  // Padding byte
             byte[] label = Encoding.ASCII.GetBytes(Label);
             Array.Resize(ref label, 12);

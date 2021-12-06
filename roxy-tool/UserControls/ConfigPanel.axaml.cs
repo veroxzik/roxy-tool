@@ -73,10 +73,10 @@ namespace roxy_tool.UserControls
             options[OptionStrings.FlagsCheck].SetCheck(stdConfig.Flags);
             options[OptionStrings.Qe1Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE1Sens));
             options[OptionStrings.Qe1ReductionRatio].SetCombo(stdConfig.QE1ReductionRatio);
-            options[OptionStrings.Qe1DeadzoneAngle].SetCombo(stdConfig.QE1AxisDeadzone);
+            options[OptionStrings.Qe1DeadzoneAngle].SetNumber(stdConfig.QE1AxisDeadzone);
             options[OptionStrings.Qe2Sensitivity].SetCombo(ConfigDefines.ByteToCombo(stdConfig.QE2Sens));
             options[OptionStrings.Qe2ReductionRatio].SetCombo(stdConfig.QE2ReductionRatio);
-            options[OptionStrings.Qe2DeadzoneAngle].SetCombo(stdConfig.QE2AxisDeadzone);
+            options[OptionStrings.Qe2DeadzoneAngle].SetNumber(stdConfig.QE2AxisDeadzone);
             options[OptionStrings.Ps2Mode].SetCombo(stdConfig.PS2Mode);
             options[OptionStrings.RgbInterface].SetCombo(stdConfig.RgbInterface);
             options[OptionStrings.RgbBrightness].SetNumber(stdConfig.RgbBrightness);
@@ -97,28 +97,34 @@ namespace roxy_tool.UserControls
 
         public byte[] GetStdMapping()
         {
-            byte[] config = new byte[30];
-            byte[] label = Encoding.ASCII.GetBytes(options[OptionStrings.BoardLabel].GetText());
-            Array.Resize(ref label, 12);
-            Array.Copy(label, 0, config, 0, 12);
+            List<byte> bytes = new List<byte>();
+            bytes.AddRange(Encoding.ASCII.GetBytes(options[OptionStrings.BoardLabel].GetText()));
+            while(bytes.Count < 12)
+            {
+                bytes.Add(0x00);
+            }
             uint flags = options[OptionStrings.FlagsCheck].GetCheck();
-            Array.Copy(BitConverter.GetBytes(flags), 0, config, 12, 4);
-            config[16] = (byte)ConfigDefines.ComboToByte(options[OptionStrings.Qe1Sensitivity].GetCombo());
-            config[17] = (byte)ConfigDefines.ComboToByte(options[OptionStrings.Qe2Sensitivity].GetCombo());
-            config[18] = (byte)options[OptionStrings.Ps2Mode].GetCombo();
-            config[19] = (byte)options[OptionStrings.RgbInterface].GetCombo();
-            config[20] = (byte)options[OptionStrings.RgbBrightness].GetNumber();
-            config[21] = (byte)options[OptionStrings.DebounceTime].GetNumber();
-            config[22] = (byte)options[OptionStrings.AscEmulation].GetCombo();
-            config[23] = (byte)options[OptionStrings.AxisDebounceTime].GetNumber();
-            config[24] = (byte)options[OptionStrings.ControllerOutput].GetCombo();
-            config[25] = (byte)options[OptionStrings.Qe1ReductionRatio].GetCombo();
-            config[26] = (byte)options[OptionStrings.Qe2ReductionRatio].GetCombo();
-            config[27] = (byte)options[OptionStrings.AxisSustainTime].GetNumber();
-            config[28] = (byte)options[OptionStrings.Qe1DeadzoneAngle].GetNumber();
-            config[29] = (byte)options[OptionStrings.Qe2DeadzoneAngle].GetNumber();
+            bytes.AddRange(BitConverter.GetBytes(flags));
+            while(bytes.Count < 16)
+            {
+                bytes.Add(0x00);
+            }
+            bytes.Add((byte)ConfigDefines.ComboToByte(options[OptionStrings.Qe1Sensitivity].GetCombo()));
+            bytes.Add((byte)ConfigDefines.ComboToByte(options[OptionStrings.Qe2Sensitivity].GetCombo()));
+            bytes.Add((byte)options[OptionStrings.Ps2Mode].GetCombo());
+            bytes.Add((byte)options[OptionStrings.RgbInterface].GetCombo());
+            bytes.Add((byte)options[OptionStrings.RgbBrightness].GetNumber());
+            bytes.Add((byte)options[OptionStrings.DebounceTime].GetNumber());
+            bytes.Add((byte)options[OptionStrings.AscEmulation].GetCombo());
+            bytes.Add((byte)options[OptionStrings.AxisDebounceTime].GetNumber());
+            bytes.Add((byte)options[OptionStrings.ControllerOutput].GetCombo());
+            bytes.Add((byte)options[OptionStrings.Qe1ReductionRatio].GetCombo());
+            bytes.Add((byte)options[OptionStrings.Qe2ReductionRatio].GetCombo());
+            bytes.Add((byte)options[OptionStrings.AxisSustainTime].GetNumber());
+            bytes.Add((byte)options[OptionStrings.Qe1DeadzoneAngle].GetNumber());
+            bytes.Add((byte)options[OptionStrings.Qe2DeadzoneAngle].GetNumber());
 
-            return config;
+            return bytes.ToArray(); ;
         }
 
         public byte[] GetRgbMapping()
