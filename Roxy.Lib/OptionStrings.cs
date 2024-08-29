@@ -13,6 +13,7 @@
         public static readonly string AnalogButtons = "analogButtons";
         public static readonly string InvertButtonLights = "invertButLights";
         public static readonly string SplitQe = "splitQe";
+        public static readonly string DisableXYAxis = "disableXYAxis";
         public static readonly string Qe1Sensitivity = "qe1Combo";
         public static readonly string Qe2Sensitivity = "qe2Combo";
         public static readonly string Qe1ReductionRatio = "qe1ReductionCombo";
