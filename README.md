@@ -6,6 +6,10 @@ This is a simple tool to configure the Roxy and arcin boards.
 
 The current version is available [on the release page](https://github.com/veroxzik/roxy-tool/releases).
 
+### Prerequisites
+
+This project uses the [.NET Core 3.1](https://dotnet.microsoft.com/en-us/download/dotnet/3.1) runtime and this must be installed to run.
+
 ## Configuration Options
 
 See [the wiki](https://github.com/veroxzik/roxy-tool/wiki) for a description of the configuration options.
